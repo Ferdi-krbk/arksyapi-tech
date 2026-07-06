@@ -1,0 +1,4 @@
+# includes/ ve models/ klasorlerine tarayicidan DOGRUDAN erisimi engelle
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>

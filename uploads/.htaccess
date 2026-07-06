@@ -1,0 +1,8 @@
+# uploads klasorunde PHP CALISTIRMAYI ENGELLE
+# Zararli bir dosya yuklense bile calistirilamaz.
+
+php_flag engine off
+
+<FilesMatch "\.(php|php3|php4|php5|php7|phtml|phar|pl|py|cgi|asp)$">
+    Require all denied
+</FilesMatch>
