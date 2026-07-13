@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
-import { Counter } from "@/components/site/Counter";
 import { Testimonials } from "@/components/site/Testimonials";
 import { ProjectCardSkeleton } from "@/components/site/Skeleton";
 import { SERVICES } from "@/lib/services";
@@ -67,7 +66,7 @@ function Home() {
                 <span className="italic font-medium text-forest">{heroSub}</span>
               </motion.h1>
               <motion.p
-                className="mt-10 max-w-xl text-lg text-muted-foreground leading-relaxed"
+                className="mt-8 max-w-xl text-base text-muted-foreground leading-relaxed"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
               >
@@ -91,38 +90,13 @@ function Home() {
                 </Link>
               </motion.div>
             </div>
-            <div className="col-span-12 lg:col-span-5 xl:col-span-4">
-              <div className="hidden lg:block rule-line mb-8" />
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-8">
-                <div>
-                  <dt className="eyebrow text-forest/70">Deneyim</dt>
-                  <dd className="display-lg text-forest-deep mt-2"><Counter value={10} suffix="+" /></dd>
-                  <p className="mt-1 text-xs text-muted-foreground">Yıl saha uygulaması</p>
-                </div>
-                <div>
-                  <dt className="eyebrow text-forest/70">Proje</dt>
-                  <dd className="display-lg text-forest-deep mt-2"><Counter value={100} suffix="+" /></dd>
-                  <p className="mt-1 text-xs text-muted-foreground">Tamamlanan iş</p>
-                </div>
-                <div>
-                  <dt className="eyebrow text-forest/70">Sistem</dt>
-                  <dd className="display-lg text-forest-deep mt-2"><Counter value={5} prefix="0" /></dd>
-                  <p className="mt-1 text-xs text-muted-foreground">Uzmanlık alanı</p>
-                </div>
-                <div>
-                  <dt className="eyebrow text-forest/70">Memnuniyet</dt>
-                  <dd className="display-lg text-forest-deep mt-2"><Counter value={100} suffix="+" /></dd>
-                  <p className="mt-1 text-xs text-muted-foreground">Memnun müşteri</p>
-                </div>
-              </dl>
-            </div>
           </div>
 
           {/* Hero — buyuk ARKS logosu (acik temada koyu yesil panel + beyaz logo,
               koyu temada acik panel + koyu logo) */}
           <motion.div
             className="mt-20 relative overflow-hidden hero-panel flex items-center justify-center"
-            style={{ minHeight: "70vh" }}
+            style={{ minHeight: "55vh" }}
             initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -138,14 +112,14 @@ function Home() {
             <img
               src={heroLogoImg}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8 dark:hidden"
+              className="relative z-10 w-[75%] max-w-[550px] h-auto py-10 px-6 dark:hidden"
               width={800}
               height={202}
             />
             <img
               src={heroLogoDark}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8 hidden dark:block"
+              className="relative z-10 w-[75%] max-w-[550px] h-auto py-10 px-6 hidden dark:block"
               width={800}
               height={202}
             />
@@ -202,7 +176,7 @@ function Home() {
                   <span className="eyebrow text-forest">{s.index}</span>
                 </div>
                 <div className="col-span-10 md:col-span-4">
-                  <h3 className="font-display text-3xl md:text-5xl text-forest-deep group-hover:translate-x-2 transition-transform">
+                  <h3 className="font-display text-2xl md:text-3xl text-forest-deep group-hover:translate-x-2 transition-transform">
                     {s.title}
                   </h3>
                 </div>
@@ -234,7 +208,7 @@ function Home() {
           </div>
           <div className="col-span-12 md:col-span-9">
             <Reveal>
-            <p className="font-display text-3xl md:text-5xl leading-tight font-light">
+            <p className="font-display text-2xl md:text-3xl leading-tight font-light">
               Yalıtım, görünmeyen bir sanattır.
               <span className="text-sage"> Zamanla değil, zamana rağmen ölçülür.</span>
               Her uygulamada moleküler hassasiyet, saha disiplini ve mimari
@@ -317,7 +291,7 @@ function Home() {
               {projects.length > 0 && (
                 <div className="col-span-12 md:col-span-7 bg-sage-soft p-10 md:p-14 flex flex-col justify-between">
                   <p className="eyebrow text-forest">— Vaka Çalışması</p>
-                  <p className="font-display text-2xl md:text-4xl text-forest-deep leading-tight mt-8 max-w-lg">
+                  <p className="font-display text-xl md:text-2xl text-forest-deep leading-tight mt-6 max-w-lg">
                     {projects.length}+ tamamlanan proje, her biri mühendislik hassasiyetiyle uygulandı.
                   </p>
                   <Link to="/projeler" className="mt-10 text-sm text-forest-deep border-b border-forest-deep pb-1 self-start hover:pb-2 transition-all">
@@ -341,7 +315,7 @@ function Home() {
               ? [...references, ...references].map((r, i) => (
                   <span
                     key={`${r.id}-${i}`}
-                    className="inline-flex items-center gap-5 font-display text-2xl md:text-3xl text-forest-deep/50 hover:text-forest-deep transition-colors duration-300"
+                    className="inline-flex items-center gap-5 font-display text-lg md:text-xl text-forest-deep/50 hover:text-forest-deep transition-colors duration-300"
                   >
                     {r.logo_url && (
                       <img src={r.logo_url} alt="" className="h-12 w-auto max-w-[100px] object-contain opacity-40 group-hover:opacity-70 transition-opacity" loading="lazy" />
