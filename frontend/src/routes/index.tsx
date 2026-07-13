@@ -40,8 +40,6 @@ function Home() {
 
   const activeSlider = sliders[activeIdx] ?? null;
   const heroImage = activeSlider?.image_url || heroImg;
-  const heroTitle = activeSlider?.title || "Sessiz güç.";
-  const heroSub = activeSlider?.subtitle || "";
   const heroBtn = activeSlider?.button_text;
   const heroBtnUrl = activeSlider?.button_url;
 
@@ -57,14 +55,6 @@ function Home() {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               >— Est. Endüstriyel Yalıtım</motion.p>
-              <motion.h1
-                className="display-lg text-forest-deep"
-                initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {heroTitle}<br />
-                <span className="italic font-medium text-forest">{heroSub}</span>
-              </motion.h1>
               <motion.p
                 className="mt-8 max-w-xl text-base text-muted-foreground leading-relaxed"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
