@@ -2,17 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
-import { Reveal } from "@/components/site/Reveal";
 import { Testimonials } from "@/components/site/Testimonials";
-import { ProjectCardSkeleton } from "@/components/site/Skeleton";
-import { SERVICES } from "@/lib/services";
-import { useSliders, useProjects, useSettings, useReferences, settingsQueryOptions, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
+import { useSliders, useSettings, useReferences, settingsQueryOptions, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
 import heroImg from "@/assets/hero-green-roof.jpg";
 import heroLogoImg from "@/assets/arks-hero-white.png";
 import heroLogoDark from "@/assets/arks-hero-dark.png";
-import projectIndustrial from "@/assets/project-industrial.jpg";
-import projectGreenRoof from "@/assets/project-green-roof.jpg";
-import projectMembrane from "@/assets/project-membrane.jpg";
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => {
@@ -26,7 +20,6 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data: sliders = [] } = useSliders();
-  const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: settings = {} } = useSettings();
   const { data: references = [] } = useReferences();
   const [activeIdx, setActiveIdx] = useState(0);
@@ -132,173 +125,58 @@ function Home() {
             )}
           </motion.div>
 
-          {/* Sirket tanitimi — hero'nun altinda */}
-          <div className="mt-10 max-w-3xl">
-            <p className="eyebrow text-forest mb-3">{settings.about_title || "Endüstriyel Yalıtım"}</p>
-            <p className="text-forest-deep font-display text-xl md:text-2xl leading-snug">
-              {settings.about_text || "Endüstriyel yalıtım ve kaplama sistemlerinde uzman; polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı çözümleriyle yapılarınıza kalıcı koruma sağlıyoruz."}
-            </p>
-            {heroBtn && heroBtnUrl && (
-              <a href={heroBtnUrl} className="inline-flex items-center gap-2 mt-4 text-sm text-forest-deep border-b border-forest-deep pb-1 hover:gap-3 transition-all">
-                {heroBtn} <span aria-hidden>→</span>
-              </a>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* SERVICES — vertical numbered index */}
-      <section className="py-24 lg:py-40 bg-bone">
-        <div className="container-editorial">
-          <Reveal>
-            <div className="grid grid-cols-12 gap-6 mb-16">
-              <div className="col-span-12 md:col-span-4">
-                <p className="eyebrow text-forest">— Hizmet Alanlarımız</p>
-              </div>
-              <div className="col-span-12 md:col-span-8">
-                <h2 className="display-lg text-forest-deep max-w-2xl">
-                  Beş sistem. Tek bir <span className="italic font-light">disiplin.</span>
-                </h2>
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="border-t border-forest-deep/20">
-            {SERVICES.map((s, i) => (
-              <Reveal key={s.slug} delay={i * 0.06}>
-              <Link
-                to={s.to}
-                className="group grid grid-cols-12 gap-6 items-center py-8 lg:py-12 border-b border-forest-deep/20 hover:bg-sage-soft/40 transition-colors -mx-6 px-6 md:-mx-10 md:px-10"
-              >
-                <div className="col-span-2 md:col-span-1">
-                  <span className="eyebrow text-forest">{s.index}</span>
-                </div>
-                <div className="col-span-10 md:col-span-4">
-                  <h3 className="font-display text-2xl md:text-3xl text-forest-deep group-hover:translate-x-2 transition-transform">
-                    {s.title}
-                  </h3>
-                </div>
-                <div className="col-span-12 md:col-span-5">
-                  <p className="text-muted-foreground max-w-md leading-relaxed">
-                    {s.tagline}
-                  </p>
-                </div>
-                <div className="col-span-12 md:col-span-2 flex md:justify-end">
-                  <span
-                    className="inline-flex items-center gap-2 text-sm text-forest-deep border-b border-forest-deep pb-1 group-hover:gap-4 transition-all"
-                    aria-hidden
-                  >
-                    İncele →
-                  </span>
-                </div>
-              </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* MANIFESTO */}
-      <section className="py-24 lg:py-40 bg-forest-deep text-bone">
-        <div className="container-editorial grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-3">
-            <p className="eyebrow text-sage">— Manifesto</p>
-          </div>
-          <div className="col-span-12 md:col-span-9">
-            <Reveal>
-            <p className="font-display text-2xl md:text-3xl leading-tight font-light">
-              Yalıtım, görünmeyen bir sanattır.
-              <span className="text-sage"> Zamanla değil, zamana rağmen ölçülür.</span>
-              Her uygulamada moleküler hassasiyet, saha disiplini ve mimari
-              hürmet aynı anda çalışır.
-            </p>
-            </Reveal>
-            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+          {/* SPRAY GUN — hizmetler efekti */}
+          <div className="mt-16 mb-8 overflow-hidden">
+            <motion.div
+              className="flex flex-wrap justify-center gap-x-6 gap-y-3"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
+            >
               {[
-                { t: "Malzeme", d: "Yalnızca uluslararası sertifikalı reçine ve sistemler." },
-                { t: "Uygulama", d: "Fabrika seviyesinde ekipman ile eğitimli saha ekipleri." },
-                { t: "Garanti", d: "10 yıla varan sistem güvencesi ve düzenli denetim." },
-              ].map((x, i) => (
-                <Reveal key={x.t} delay={i * 0.1}>
-                  <p className="eyebrow text-sage mb-3">{x.t}</p>
-                  <p className="text-bone/85 leading-relaxed">{x.d}</p>
-                </Reveal>
+                "Polyurea",
+                "Poliüretan",
+                "Sürme İzolasyon",
+                "Zemin Kaplama",
+                "Yeşil Çatı",
+              ].map((word, i) => (
+                <motion.span
+                  key={word}
+                  className="relative inline-block font-display text-4xl md:text-6xl font-light text-forest-deep/80"
+                  variants={{
+                    hidden: { opacity: 0, filter: "blur(12px)", scale: 1.3, y: -10 },
+                    visible: {
+                      opacity: 1,
+                      filter: "blur(0px)",
+                      scale: 1,
+                      y: 0,
+                      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                    },
+                  }}
+                >
+                  {word}
+                  {i < 4 && (
+                    <span className="text-forest/30 mx-2">·</span>
+                  )}
+                </motion.span>
               ))}
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </section>
 
-      {/* FEATURED PROJECTS — API'den dinamik */}
-      <section className="py-24 lg:py-40">
-        <div className="container-editorial">
-          <Reveal>
-            <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
-              <div>
-                <p className="eyebrow text-forest mb-4">— Seçili Projeler</p>
-                <h2 className="display-lg text-forest-deep">Sahada, ölçekte, sessizce.</h2>
-              </div>
-              <Link to="/projeler" className="text-sm text-forest-deep border-b border-forest-deep pb-1 hover:pb-2 transition-all">
-                Tüm projeler →
-              </Link>
-            </div>
-          </Reveal>
-
-          {projectsLoading ? (
-            <div className="grid grid-cols-12 gap-6">
-              <div className="col-span-12 md:col-span-8"><ProjectCardSkeleton /></div>
-              <div className="col-span-12 md:col-span-4"><ProjectCardSkeleton /></div>
-              <div className="col-span-12 md:col-span-5"><ProjectCardSkeleton /></div>
-            </div>
-          ) : projects.length === 0 ? (
-            <p className="text-muted-foreground text-center py-16">Henüz proje eklenmedi. <Link to="/projeler" className="underline">Proje sayfasını</Link> ziyaret edin.</p>
-          ) : (
-            <div className="grid grid-cols-12 gap-6">
-              {projects.slice(0, 3).map((p, i) => {
-                const cols = i === 0 ? "col-span-12 md:col-span-8" : i === 1 ? "col-span-12 md:col-span-4" : "col-span-12 md:col-span-5";
-                const imgSrc = p.cover_image_url || (i % 3 === 0 ? projectIndustrial : i % 3 === 1 ? projectGreenRoof : projectMembrane);
-                return (
-                  <Link
-                    key={p.id}
-                    to="/projeler/$slug"
-                    params={{ slug: p.slug }}
-                    className={`${cols} group overflow-hidden block`}
-                  >
-                  <motion.figure className="overflow-hidden"
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    <div className="overflow-hidden">
-                      <img src={imgSrc} alt={p.title} loading="lazy" width={1200} height={900}
-                        className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-[1200ms]" />
-                    </div>
-                    <figcaption className="mt-5 flex justify-between items-baseline gap-4">
-                      <div>
-                        <p className="eyebrow text-forest">{p.category_name || (p.location ? `Proje / ${p.location}` : "Proje")}</p>
-                        <p className="font-display text-2xl text-forest-deep mt-1">{p.title}</p>
-                        {p.summary && <p className="text-sm text-muted-foreground mt-2 max-w-md">{p.summary}</p>}
-                      </div>
-                      <span className="text-xs text-muted-foreground shrink-0">{p.completion_date ? new Date(p.completion_date).getFullYear() : ""}</span>
-                    </figcaption>
-                  </motion.figure>
-                  </Link>
-                );
-              })}
-              {projects.length > 0 && (
-                <div className="col-span-12 md:col-span-7 bg-sage-soft p-10 md:p-14 flex flex-col justify-between">
-                  <p className="eyebrow text-forest">— Vaka Çalışması</p>
-                  <p className="font-display text-xl md:text-2xl text-forest-deep leading-tight mt-6 max-w-lg">
-                    {projects.length}+ tamamlanan proje, her biri mühendislik hassasiyetiyle uygulandı.
-                  </p>
-                  <Link to="/projeler" className="mt-10 text-sm text-forest-deep border-b border-forest-deep pb-1 self-start hover:pb-2 transition-all">
-                    Vakaları incele →
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
+          {/* Sirket alt metin */}
+          <div className="max-w-2xl mx-auto text-center pb-20">
+            <motion.p
+              className="text-muted-foreground leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Endüstriyel yalıtım ve kaplama sistemlerinde uzman; yapılarınıza
+              dikişsiz, monolitik ve ömür boyu dayanan koruma sağlıyoruz.
+            </motion.p>
+          </div>
         </div>
       </section>
 
