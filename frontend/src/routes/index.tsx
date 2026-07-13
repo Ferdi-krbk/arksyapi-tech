@@ -8,8 +8,6 @@ import heroImg from "@/assets/hero-green-roof.jpg";
 import heroLogoImg from "@/assets/arks-hero-white.png";
 import heroLogoDark from "@/assets/arks-hero-dark.png";
 
-const SPRAY_WORDS = ["Polyurea", "Poliüretan", "Sürme İzolasyon", "Zemin Kaplama", "Yeşil Çatı"];
-
 export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     const { queryClient } = context;
@@ -19,37 +17,119 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+const sprayItem = {
+  hidden: { opacity: 0, scale: 0.3, x: -120, filter: "blur(8px)" },
+  visible: (i: number) => ({
+    opacity: 1, scale: 1, x: 0, filter: "blur(0px)",
+    transition: { type: "spring" as const, stiffness: 280, damping: 18, mass: 0.5, delay: 0.6 + i * 0.18 },
+  }),
+};
+
 function Home() {
   const { data: sliders = [] } = useSliders();
   const { data: references = [] } = useReferences();
   const [activeIdx, setActiveIdx] = useState(0);
+  const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
-    if (sliders.length <= 1) return;
+    const t = setTimeout(() => setIntroDone(true), 3500);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!introDone || sliders.length <= 1) return;
     const t = setInterval(() => setActiveIdx((i) => (i + 1) % sliders.length), 5000);
     return () => clearInterval(t);
-  }, [sliders.length]);
+  }, [sliders.length, introDone]);
 
   const activeSlider = sliders[activeIdx] ?? null;
   const heroImage = activeSlider?.image_url || heroImg;
-  const heroBtn = activeSlider?.button_text;
-  const heroBtnUrl = activeSlider?.button_url;
 
   return (
     <PageShell>
+      {/* FULL-PAGE SPRAY INTRO — tüm sayfa tabancayla püskürtülerek geliyor */}
+      <motion.div
+        className="min-h-screen"
+        initial="hidden"
+        animate="visible"
+        variants={{ visible: { transition: { staggerChildren: 1 } } }}
+      >
+        {/* SPRAY GUN — büyük tabanca, intro sonrası küçülüp sola geçer */}
+        <motion.div
+          className="fixed z-[60] pointer-events-none"
+          style={{ left: "50%", top: "45%", x: "-50%", y: "-50%" }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{
+            opacity: introDone ? 0 : 1,
+            scale: introDone ? 0.3 : 1,
+            left: introDone ? "6%" : "50%",
+            top: introDone ? "42%" : "45%",
+          }}
+          transition={{ duration: 0.6, delay: introDone ? 2.5 : 0, ease: "easeInOut" }}
+        >
+          {/* Püskürtme partikülleri */}
+          {!introDone && [...Array(12)].map((_, j) => (
+            <motion.div
+              key={j}
+              className="absolute rounded-full bg-forest/50"
+              style={{
+                width: 4 + Math.random() * 8,
+                height: 4 + Math.random() * 8,
+                right: -20,
+                top: "50%",
+              }}
+              animate={{
+                x: [0, 40 + Math.random() * 200],
+                y: [0, (Math.random() - 0.5) * 120],
+                opacity: [0, 1, 0],
+                scale: [0, 1.5, 0],
+              }}
+              transition={{
+                duration: 0.5 + Math.random() * 0.4,
+                delay: j * 0.15,
+                repeat: Infinity,
+                repeatDelay: 0.8,
+              }}
+            />
+          ))}
+          <svg viewBox="0 0 140 90" className="w-36 h-auto md:w-48 fill-forest-deep drop-shadow-2xl">
+            <rect x="14" y="20" width="90" height="28" rx="5" />
+            <rect x="34" y="48" width="7" height="30" rx="2" />
+            <rect x="24" y="66" width="26" height="5" rx="2" />
+            <polygon points="100,26 126,32 126,36 100,42" />
+            <circle cx="130" cy="34" r="6" />
+            <rect x="50" y="0" width="24" height="20" rx="4" />
+            <rect x="54" y="3" width="16" height="14" rx="2" opacity="0.45" />
+            <path d="M12 28 L2 28 Q0 28 0 26 L0 16" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
+          </svg>
+        </motion.div>
+
+        {/* SAYFA İÇERİĞİ — tabanca ile püskürtülerek geliyor */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
+        >
       <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20">
         <div className="container-editorial">
           <div className="grid grid-cols-12 gap-6 lg:gap-10 items-end">
-            <div className="col-span-12 lg:col-span-7 xl:col-span-8">
+            <div className="col-span-12 lg:col-span-8">
               <motion.p
                 className="eyebrow text-forest mb-8"
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                custom={0} variants={sprayItem} initial="hidden" animate="visible"
               >— Est. Endüstriyel Yalıtım</motion.p>
+
+              <motion.h1
+                className="display-lg text-forest-deep max-w-3xl"
+                custom={1} variants={sprayItem} initial="hidden" animate="visible"
+              >
+                Polyurea ve poliüretan<br />
+                <span className="italic font-light text-forest">çözümleri</span>
+              </motion.h1>
+
               <motion.div
                 className="mt-10 flex flex-wrap items-center gap-6"
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                custom={2} variants={sprayItem} initial="hidden" animate="visible"
               >
                 <Link to="/projeler" className="group inline-flex items-center gap-3 bg-forest-deep text-bone px-7 py-4 text-sm font-medium hover:bg-forest transition-colors">
                   Tamamlanan Projeler <span className="transition-transform group-hover:translate-x-1" aria-hidden>→</span>
@@ -61,21 +141,20 @@ function Home() {
             </div>
           </div>
 
-          {/* Hero panel — ARKS logosu */}
+          {/* Hero panel — ARKS logosu (boşlukla ayrılmış) */}
           <motion.div
-            className="mt-20 relative overflow-hidden hero-panel flex items-center justify-center"
-            style={{ minHeight: "38vh" }}
-            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-24 relative overflow-hidden hero-panel flex items-center justify-center"
+            style={{ minHeight: "36vh" }}
+            custom={3} variants={sprayItem} initial="hidden" animate="visible"
           >
             {activeSlider?.image_url ? (
               <img src={heroImage} alt={activeSlider?.title || "ARKS"} width={1600} height={1200}
                 className="w-full h-full absolute inset-0 object-cover transition-all duration-1000 opacity-40" />
             ) : null}
             <img src={heroLogoImg} alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[60%] max-w-[300px] h-auto py-5 px-3 dark:hidden" width={800} height={202} />
+              className="relative z-10 w-[50%] max-w-[260px] h-auto py-5 px-3 dark:hidden" width={800} height={202} />
             <img src={heroLogoDark} alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[60%] max-w-[300px] h-auto py-5 px-3 hidden dark:block" width={800} height={202} />
+              className="relative z-10 w-[50%] max-w-[260px] h-auto py-5 px-3 hidden dark:block" width={800} height={202} />
             {sliders.length > 1 && (
               <div className="absolute top-6 right-6 md:top-10 md:right-10 flex gap-2 z-20">
                 {sliders.map((_, i) => (
@@ -86,101 +165,16 @@ function Home() {
               </div>
             )}
           </motion.div>
-
-          {/* SPRAY GUN — kocaman tabanca + hizmet isimleri püskürtme */}
-          <div className="mt-16 mb-4">
-            <motion.div
-              className="flex items-start gap-6 md:gap-10"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={{ visible: { transition: { staggerChildren: 0.3 } } }}
-            >
-              {/* BÜYÜK Spray Gun SVG */}
-              <motion.div
-                className="shrink-0"
-                variants={{
-                  hidden: { opacity: 0, x: -60, rotate: -20, scale: 0.5 },
-                  visible: { opacity: 1, x: 0, rotate: 0, scale: 1,
-                    transition: { type: "spring", stiffness: 180, damping: 12, mass: 0.8 } },
-                }}
-              >
-                {/* Spray particles animasyonu */}
-                <motion.div
-                  className="relative"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                >
-                  {[...Array(5)].map((_, j) => (
-                    <motion.div
-                      key={j}
-                      className="absolute top-1/2 right-0 w-2 h-2 rounded-full bg-forest/40"
-                      variants={{
-                        hidden: { opacity: 0, x: 0, y: 0 },
-                        visible: {
-                          opacity: [0, 1, 0],
-                          x: [0, 30 + j * 25],
-                          y: [0, (j - 2) * 12],
-                          scale: [0, 2, 0],
-                          transition: {
-                            duration: 0.6,
-                            delay: 0.6 + j * 0.12,
-                            repeat: Infinity,
-                            repeatDelay: 1.5,
-                          },
-                        },
-                      }}
-                    />
-                  ))}
-                </motion.div>
-                <svg viewBox="0 0 120 80" className="w-24 h-auto md:w-32 fill-forest-deep">
-                  <rect x="12" y="18" width="78" height="24" rx="4" />
-                  <rect x="30" y="42" width="6" height="26" rx="2" />
-                  <rect x="22" y="58" width="22" height="4" rx="2" />
-                  <polygon points="86,22 108,28 108,32 86,38" />
-                  <circle cx="110" cy="30" r="5" />
-                  <rect x="44" y="0" width="20" height="18" rx="3" />
-                  <rect x="47" y="3" width="14" height="12" rx="2" opacity="0.5" />
-                  <path d="M10 24 L2 24 Q0 24 0 22 L0 14" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-                </svg>
-              </motion.div>
-
-              {/* Püskürtülen hizmet isimleri */}
-              <motion.div
-                className="flex flex-wrap gap-x-4 gap-y-2 pt-2"
-                variants={{
-                  hidden: { opacity: 0 },
-                  visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-                }}
-              >
-                {SPRAY_WORDS.map((word, i) => (
-                  <motion.span
-                    key={word}
-                    className="inline-flex items-center"
-                    variants={{
-                      hidden: { opacity: 0, scale: 0, x: -80, filter: "blur(10px)" },
-                      visible: {
-                        opacity: 1, scale: 1, x: 0, filter: "blur(0px)",
-                        transition: { type: "spring", stiffness: 400, damping: 14, mass: 0.35 },
-                      },
-                    }}
-                  >
-                    <span className="font-display text-4xl md:text-7xl font-light text-forest-deep/80">
-                      {word}
-                    </span>
-                    {i < SPRAY_WORDS.length - 1 && (
-                      <span className="text-forest/20 mx-3 md:mx-5 text-3xl md:text-5xl relative -top-1">·</span>
-                    )}
-                  </motion.span>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
         </div>
       </section>
+        </motion.div>
 
-      {/* REFERENCES — marquee */}
+        {/* REFERENCES — marquee (gecikmeli) */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 2.2, ease: [0.22, 1, 0.36, 1] }}
+        >
       <section className="py-24 border-y border-forest-deep/15 bg-sage-soft/30 overflow-hidden">
         <div className="container-editorial mb-12">
           <p className="eyebrow text-forest">— Referanslar</p>
@@ -192,7 +186,7 @@ function Home() {
                   <span key={`${r.id}-${i}`}
                     className="inline-flex items-center gap-5 font-display text-lg md:text-xl text-forest-deep/50 hover:text-forest-deep transition-colors duration-300">
                     {r.logo_url && (
-                      <img src={r.logo_url} alt="" className="h-12 w-auto max-w-[100px] object-contain opacity-40 group-hover:opacity-70 transition-opacity" loading="lazy" />
+                      <img src={r.logo_url} alt="" className="h-12 w-auto max-w-[100px] object-contain opacity-40" loading="lazy" />
                     )}
                     {r.name}
                   </span>
@@ -201,31 +195,40 @@ function Home() {
           </div>
         </div>
       </section>
+        </motion.div>
 
-      <Testimonials />
+        {/* Testimonials + CTA gecikmeli */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 2.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Testimonials />
 
-      <section className="py-24 lg:py-40">
-        <div className="container-editorial">
-          <div className="grid grid-cols-12 gap-6 items-center">
-            <div className="col-span-12 md:col-span-7">
-              <p className="eyebrow text-forest mb-6">— İletişim</p>
-              <h2 className="display-lg text-forest-deep">
-                Bir sonraki yapı<br /> birlikte ayakta kalsın.
-              </h2>
+          <section className="py-24 lg:py-40">
+            <div className="container-editorial">
+              <div className="grid grid-cols-12 gap-6 items-center">
+                <div className="col-span-12 md:col-span-7">
+                  <p className="eyebrow text-forest mb-6">— İletişim</p>
+                  <h2 className="display-lg text-forest-deep">
+                    Bir sonraki yapı<br /> birlikte ayakta kalsın.
+                  </h2>
+                </div>
+                <div className="col-span-12 md:col-span-5 md:pl-10">
+                  <p className="text-muted-foreground leading-relaxed mb-8">
+                    Projelerinizin ölçeği ne olursa olsun; keşif, tasarım ve uygulama
+                    aşamalarında yanınızdayız. İlk görüşme ve keşif ücretsizdir.
+                  </p>
+                  <Link to="/iletisim"
+                    className="inline-flex items-center gap-3 bg-forest-deep text-bone px-8 py-4 text-sm font-medium hover:bg-forest transition-colors">
+                    Bize ulaşın <span aria-hidden>→</span>
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className="col-span-12 md:col-span-5 md:pl-10">
-              <p className="text-muted-foreground leading-relaxed mb-8">
-                Projelerinizin ölçeği ne olursa olsun; keşif, tasarım ve uygulama
-                aşamalarında yanınızdayız. İlk görüşme ve keşif ücretsizdir.
-              </p>
-              <Link to="/iletisim"
-                className="inline-flex items-center gap-3 bg-forest-deep text-bone px-8 py-4 text-sm font-medium hover:bg-forest transition-colors">
-                Bize ulaşın <span aria-hidden>→</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        </motion.div>
+      </motion.div>
     </PageShell>
   );
 }
