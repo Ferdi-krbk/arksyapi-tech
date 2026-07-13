@@ -110,14 +110,14 @@ function Home() {
             <img
               src={heroLogoImg}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[75%] max-w-[550px] h-auto py-10 px-6 dark:hidden"
+              className="relative z-10 w-[65%] max-w-[380px] h-auto py-8 px-5 dark:hidden"
               width={800}
               height={202}
             />
             <img
               src={heroLogoDark}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[75%] max-w-[550px] h-auto py-10 px-6 hidden dark:block"
+              className="relative z-10 w-[65%] max-w-[380px] h-auto py-8 px-5 hidden dark:block"
               width={800}
               height={202}
             />
