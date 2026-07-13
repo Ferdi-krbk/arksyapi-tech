@@ -44,12 +44,19 @@ function References() {
               {references.map((r) => (
                 <div
                   key={r.id}
-                  className="aspect-[3/2] border-r border-b border-forest-deep/20 flex flex-col items-center justify-center p-6 text-center hover:bg-sage-soft/40 transition-colors gap-3"
+                  className="relative aspect-[3/2] border-r border-b border-forest-deep/20 flex items-center justify-center p-8 text-center hover:bg-sage-soft/40 transition-colors overflow-hidden group"
                 >
                   {r.logo_url ? (
-                    <img src={r.logo_url} alt={r.name} className="h-10 w-auto max-w-[120px] object-contain opacity-80 group-hover:opacity-100 transition-opacity" loading="lazy" />
+                    <img
+                      src={r.logo_url}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-contain p-8 opacity-[0.08] group-hover:opacity-[0.15] transition-opacity duration-500 scale-125"
+                      loading="lazy"
+                    />
                   ) : null}
-                  <span className="font-display text-lg text-forest-deep">{r.name}</span>
+                  <span className="relative font-display text-xl md:text-2xl text-forest-deep font-medium">
+                    {r.name}
+                  </span>
                 </div>
               ))}
             </div>

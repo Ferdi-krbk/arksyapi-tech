@@ -341,10 +341,10 @@ function Home() {
               ? [...references, ...references].map((r, i) => (
                   <span
                     key={`${r.id}-${i}`}
-                    className="inline-flex items-center gap-4 font-display text-2xl md:text-3xl text-forest-deep/60 hover:text-forest-deep transition-colors duration-300"
+                    className="inline-flex items-center gap-5 font-display text-2xl md:text-3xl text-forest-deep/50 hover:text-forest-deep transition-colors duration-300"
                   >
                     {r.logo_url && (
-                      <img src={r.logo_url} alt="" className="h-8 w-auto max-w-[80px] object-contain opacity-70" loading="lazy" />
+                      <img src={r.logo_url} alt="" className="h-12 w-auto max-w-[100px] object-contain opacity-40 group-hover:opacity-70 transition-opacity" loading="lazy" />
                     )}
                     {r.name}
                   </span>
