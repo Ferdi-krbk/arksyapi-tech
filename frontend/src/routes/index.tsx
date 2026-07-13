@@ -38,14 +38,9 @@ function Home() {
           <video
             autoPlay
             muted
+            loop
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
-            ref={(el) => {
-              if (!el) return;
-              const restart = () => { el.style.opacity = "0"; setTimeout(() => { el.currentTime = 0; el.play(); el.style.opacity = "1"; }, 300); };
-              el.addEventListener("ended", restart);
-              return () => el.removeEventListener("ended", restart);
-            }}
           />
         </div>
 
@@ -121,10 +116,10 @@ function Home() {
 
       {/* ─── HERO PANEL — ARKS logosu ─── */}
       <motion.div
-        className="container-editorial"
+        className="container-editorial mt-10 md:mt-20 mb-16 md:mb-24"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.8, ease }}
       >
         <div
