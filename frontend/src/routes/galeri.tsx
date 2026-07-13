@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
-import { api } from "@/integrations/api";
+import { Lightbox } from "@/components/site/Lightbox";
+import { GalleryGridSkeleton } from "@/components/site/Skeleton";
+import { useGallery } from "@/hooks/queries";
 
 export const Route = createFileRoute("/galeri")({
   head: () => ({
@@ -19,15 +21,13 @@ export const Route = createFileRoute("/galeri")({
 type GalleryItem = { id: number; title: string | null; image_url: string; category: string | null };
 
 function Gallery() {
-  const [items, setItems] = useState<GalleryItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: items = [], isLoading } = useGallery();
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    api.gallery().then((res) => {
-      setItems((res.data as GalleryItem[]) ?? []);
-      setLoading(false);
-    }).catch(() => setLoading(false));
-  }, []);
+  const openLightbox = useCallback((i: number) => setLightboxIndex(i), []);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const prev = useCallback(() => setLightboxIndex((i) => (i !== null && i > 0 ? i - 1 : items.length - 1)), [items.length]);
+  const next = useCallback(() => setLightboxIndex((i) => (i !== null && i < items.length - 1 ? i + 1 : 0)), [items.length]);
 
   return (
     <PageShell>
@@ -41,20 +41,34 @@ function Gallery() {
       </section>
       <section className="pb-24">
         <div className="container-editorial">
-          {loading ? <p className="text-muted-foreground">Yükleniyor…</p>
+          {isLoading ? <GalleryGridSkeleton />
           : items.length === 0 ? <p className="text-muted-foreground">Henüz görsel eklenmedi.</p>
           : (
             <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-              {items.map((g) => (
-                <div key={g.id} className="break-inside-avoid overflow-hidden group">
+              {items.map((g, i) => (
+                <button
+                  key={g.id}
+                  onClick={() => openLightbox(i)}
+                  className="break-inside-avoid overflow-hidden group cursor-zoom-in w-full text-left"
+                >
                   <img src={g.image_url} alt={g.title || "Galeri"} loading="lazy" className="w-full h-auto group-hover:scale-105 transition-transform duration-700" />
                   {g.title && <p className="text-xs text-muted-foreground mt-2">{g.title}</p>}
-                </div>
+                </button>
               ))}
             </div>
           )}
         </div>
       </section>
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          images={items.map((g) => ({ id: g.id, image_url: g.image_url, title: g.title }))}
+          index={lightboxIndex}
+          onClose={closeLightbox}
+          onPrev={prev}
+          onNext={next}
+        />
+      )}
     </PageShell>
   );
 }

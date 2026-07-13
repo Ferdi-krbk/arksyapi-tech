@@ -1,13 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
-import { api } from "@/integrations/api";
+import { ProjectCardSkeleton } from "@/components/site/Skeleton";
+import { useProjects, projectsQueryOptions, type ProjectItem } from "@/hooks/queries";
 import fallbackIndustrial from "@/assets/project-industrial.jpg";
 import fallbackGreenRoof from "@/assets/project-green-roof.jpg";
 import fallbackMembrane from "@/assets/project-membrane.jpg";
 
 export const Route = createFileRoute("/projeler/")({
+  loader: ({ context }) => {
+    context.queryClient.prefetchQuery(projectsQueryOptions());
+  },
   head: () => ({
     meta: [
       { title: "Tamamlanan Projeler — ARKS Yapı Teknolojileri" },
@@ -19,37 +22,15 @@ export const Route = createFileRoute("/projeler/")({
   component: Projects,
 });
 
-type ProjectRow = {
-  id: number;
-  title: string;
-  slug: string;
-  location: string | null;
-  completion_date: string | null;
-  summary: string | null;
-  cover_image: string | null;
-  cover_image_url: string | null;
-  category_name: string | null;
-};
-
 const FALLBACKS = [fallbackIndustrial, fallbackGreenRoof, fallbackMembrane];
 
-function resolveImg(row: ProjectRow, i: number): string {
+function resolveImg(row: ProjectItem, i: number): string {
   if (row.cover_image_url) return row.cover_image_url;
   return FALLBACKS[i % FALLBACKS.length];
 }
 
 function Projects() {
-  const [projects, setProjects] = useState<ProjectRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    api.projects()
-      .then((res) => {
-        setProjects((res.data as unknown as ProjectRow[]) ?? []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  const { data: projects = [], isLoading } = useProjects();
 
   return (
     <PageShell>
@@ -70,8 +51,23 @@ function Projects() {
 
       <section className="py-16">
         <div className="container-editorial">
-          {loading ? (
-            <p className="text-muted-foreground">Yükleniyor…</p>
+          {isLoading ? (
+            <div className="grid grid-cols-12 gap-6 gap-y-16">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={
+                    i % 5 === 0 ? "col-span-12 md:col-span-8"
+                    : i % 5 === 1 ? "col-span-12 md:col-span-4"
+                    : i % 5 === 2 ? "col-span-12 md:col-span-5"
+                    : i % 5 === 3 ? "col-span-12 md:col-span-7"
+                    : "col-span-12 md:col-span-6"
+                  }
+                >
+                  <ProjectCardSkeleton />
+                </div>
+              ))}
+            </div>
           ) : projects.length === 0 ? (
             <p className="text-muted-foreground">Henüz proje eklenmedi.</p>
           ) : (
@@ -94,8 +90,8 @@ function Projects() {
                       src={resolveImg(p, i)}
                       alt={p.title}
                       loading="lazy"
-                      width={1400}
-                      height={1000}
+                      width={1200}
+                      height={900}
                       className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-[1200ms]"
                     />
                   </div>

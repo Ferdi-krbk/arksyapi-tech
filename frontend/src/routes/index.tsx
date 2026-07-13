@@ -5,8 +5,9 @@ import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
 import { Counter } from "@/components/site/Counter";
 import { Testimonials } from "@/components/site/Testimonials";
+import { ProjectCardSkeleton } from "@/components/site/Skeleton";
 import { SERVICES } from "@/lib/services";
-import { api } from "@/integrations/api";
+import { useSliders, useProjects, useSettings, useReferences, settingsQueryOptions, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
 import heroImg from "@/assets/hero-green-roof.jpg";
 import heroLogoImg from "@/assets/arks-hero-white.png";
 import heroLogoDark from "@/assets/arks-hero-dark.png";
@@ -15,44 +16,21 @@ import projectGreenRoof from "@/assets/project-green-roof.jpg";
 import projectMembrane from "@/assets/project-membrane.jpg";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => {
+    const { queryClient } = context;
+    queryClient.prefetchQuery(settingsQueryOptions());
+    queryClient.prefetchQuery(slidersQueryOptions());
+    queryClient.prefetchQuery(projectsQueryOptions());
+  },
   component: Home,
 });
 
-type SliderItem = {
-  id: number;
-  title: string | null;
-  subtitle: string | null;
-  button_text: string | null;
-  button_url: string | null;
-  image_url: string | null;
-};
-
-type ProjectRow = {
-  id: number;
-  title: string;
-  slug: string;
-  location: string | null;
-  completion_date: string | null;
-  summary: string | null;
-  cover_image_url: string | null;
-  category_name: string | null;
-};
-
-const REFERENCES = [
-  "Aksa Enerji", "Borusan Mannesmann", "Çimsa", "Enerjisa", "Ford Otosan",
-  "İGA İstanbul Havalimanı", "Kalyon Holding", "Limak", "MNG Kargo",
-  "Tekfen İnşaat", "Türk Telekom", "Zorlu Enerji",
-];
-
 function Home() {
-  const [sliders, setSliders] = useState<SliderItem[]>([]);
-  const [projects, setProjects] = useState<ProjectRow[]>([]);
-  const [settings, setSettings] = useState<Record<string, string | null>>({});
+  const { data: sliders = [] } = useSliders();
+  const { data: projects = [], isLoading: projectsLoading } = useProjects();
+  const { data: settings = {} } = useSettings();
+  const { data: references = [] } = useReferences();
   const [activeIdx, setActiveIdx] = useState(0);
-
-  useEffect(() => { api.sliders().then(res => setSliders((res.data as SliderItem[])??[])).catch(()=>{}); }, []);
-  useEffect(() => { api.projects().then(res => setProjects((res.data as ProjectRow[])??[])).catch(()=>{}); }, []);
-  useEffect(() => { api.settings().then(res => setSettings(res.data as Record<string,string|null>)).catch(()=>{}); }, []);
 
   // Her 5 saniyede slider degistir
   useEffect(() => {
@@ -64,8 +42,8 @@ function Home() {
   const activeSlider = sliders[activeIdx] ?? null;
   const heroImage = activeSlider?.image_url || heroImg;
   const heroTitle = activeSlider?.title || "Sessiz güç.";
-  const heroSub   = activeSlider?.subtitle || (heroTitle === "Sessiz güç." ? "Kalıcı koruma." : "");
-  const heroBtn    = activeSlider?.button_text;
+  const heroSub = activeSlider?.subtitle || "";
+  const heroBtn = activeSlider?.button_text;
   const heroBtnUrl = activeSlider?.button_url;
 
   return (
@@ -85,8 +63,8 @@ function Home() {
                 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
               >
-                Sessiz güç.<br />
-                <span className="italic font-medium text-forest">Kalıcı</span> koruma.
+                {heroTitle}<br />
+                <span className="italic font-medium text-forest">{heroSub}</span>
               </motion.h1>
               <motion.p
                 className="mt-10 max-w-xl text-lg text-muted-foreground leading-relaxed"
@@ -161,11 +139,15 @@ function Home() {
               src={heroLogoImg}
               alt="ARKS Yapı Teknolojileri"
               className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8 dark:hidden"
+              width={800}
+              height={202}
             />
             <img
               src={heroLogoDark}
               alt="ARKS Yapı Teknolojileri"
               className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8 hidden dark:block"
+              width={800}
+              height={202}
             />
             {sliders.length > 1 && (
               <div className="absolute top-6 right-6 md:top-10 md:right-10 flex gap-2 z-20">
@@ -290,13 +272,18 @@ function Home() {
             </div>
           </Reveal>
 
-          {projects.length === 0 ? (
+          {projectsLoading ? (
+            <div className="grid grid-cols-12 gap-6">
+              <div className="col-span-12 md:col-span-8"><ProjectCardSkeleton /></div>
+              <div className="col-span-12 md:col-span-4"><ProjectCardSkeleton /></div>
+              <div className="col-span-12 md:col-span-5"><ProjectCardSkeleton /></div>
+            </div>
+          ) : projects.length === 0 ? (
             <p className="text-muted-foreground text-center py-16">Henüz proje eklenmedi. <Link to="/projeler" className="underline">Proje sayfasını</Link> ziyaret edin.</p>
           ) : (
             <div className="grid grid-cols-12 gap-6">
               {projects.slice(0, 3).map((p, i) => {
                 const cols = i === 0 ? "col-span-12 md:col-span-8" : i === 1 ? "col-span-12 md:col-span-4" : "col-span-12 md:col-span-5";
-                const ar  = i === 0 ? "aspect-[16/10]" : i === 1 ? "aspect-[3/4]" : "aspect-[4/3]";
                 const imgSrc = p.cover_image_url || (i % 3 === 0 ? projectIndustrial : i % 3 === 1 ? projectGreenRoof : projectMembrane);
                 return (
                   <Link
@@ -312,8 +299,8 @@ function Home() {
                     transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <div className="overflow-hidden">
-                      <img src={imgSrc} alt={p.title} loading="lazy" width={1400} height={1000}
-                        className={`w-full ${ar} object-cover group-hover:scale-105 transition-transform duration-[1200ms]`} />
+                      <img src={imgSrc} alt={p.title} loading="lazy" width={1200} height={900}
+                        className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-[1200ms]" />
                     </div>
                     <figcaption className="mt-5 flex justify-between items-baseline gap-4">
                       <div>
@@ -344,18 +331,22 @@ function Home() {
       </section>
 
       {/* REFERENCES — marquee */}
-      <section className="py-20 border-y border-forest-deep/15 bg-sage-soft/30 overflow-hidden">
-        <div className="container-editorial mb-10">
+      <section className="py-24 border-y border-forest-deep/15 bg-sage-soft/30 overflow-hidden">
+        <div className="container-editorial mb-12">
           <p className="eyebrow text-forest">— Referanslar</p>
         </div>
-        <div className="relative">
-          <div className="flex gap-16 marquee whitespace-nowrap">
-            {[...REFERENCES, ...REFERENCES].map((r, i) => (
-              <span key={i} className="font-display text-2xl md:text-3xl text-forest-deep/70">
-                {r}
-                <span className="text-sage ml-16">✳</span>
-              </span>
-            ))}
+        <div className="relative group">
+          <div className="flex gap-20 marquee whitespace-nowrap group-hover:[animation-play-state:paused]">
+            {references.length > 0
+              ? [...references, ...references].map((r, i) => (
+                  <span
+                    key={`${r.id}-${i}`}
+                    className="inline-flex items-center gap-20 font-display text-2xl md:text-3xl text-forest-deep/60 hover:text-forest-deep transition-colors duration-300"
+                  >
+                    {r.name}
+                  </span>
+                ))
+              : <span className="font-display text-2xl text-forest-deep/40">Henüz referans eklenmedi.</span>}
           </div>
         </div>
       </section>

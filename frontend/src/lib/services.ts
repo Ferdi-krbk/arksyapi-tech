@@ -1,8 +1,8 @@
 import polyureaImg from "@/assets/service-polyurea.jpg";
-import floorImg from "@/assets/service-floor.jpg";
+import floorImg from "@/assets/service-zemin-kaplama.jpg";
 import greenRoofImg from "@/assets/hero-green-roof.jpg";
 import industrialImg from "@/assets/project-industrial.jpg";
-import membraneImg from "@/assets/project-membrane.jpg";
+import membraneImg from "@/assets/service-surme-izolasyon.jpg";
 
 export type Service = {
   slug: string;
@@ -13,6 +13,7 @@ export type Service = {
   detail: string;
   features: string[];
   image: string;
+  imagePosition?: string;
   to:
     | "/polyurea"
     | "/poliuretan"

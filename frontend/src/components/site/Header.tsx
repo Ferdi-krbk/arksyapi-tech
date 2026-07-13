@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { api } from "@/integrations/api";
+import { useSettings } from "@/hooks/queries";
 import { ThemeToggle } from "@/components/site/ThemeToggle";
 import logoEmblem from "@/assets/arks-emblem.png";
 import logoEmblemLight from "@/assets/arks-emblem-light.png";
@@ -36,7 +36,7 @@ const MOBILE_NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [settings, setSettings] = useState<Record<string, string | null>>({});
+  const { data: settings = {} } = useSettings();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -46,8 +46,13 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    api.settings().then((res) => setSettings(res.data as Record<string, string | null>)).catch(() => {});
-  }, []);
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   return (
     <>
@@ -60,8 +65,8 @@ export function Header() {
     >
       <div className="container-editorial flex items-center justify-between h-24">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={logoEmblem} alt="ARKS" className="h-10 w-auto dark:hidden" />
-          <img src={logoEmblemLight} alt="ARKS" className="h-10 w-auto hidden dark:block" />
+          <img src={logoEmblem} alt="ARKS" className="h-10 w-auto dark:hidden" width={33} height={40} />
+          <img src={logoEmblemLight} alt="ARKS" className="h-10 w-auto hidden dark:block" width={33} height={40} />
           <span className="font-display text-2xl font-medium tracking-tight text-forest-deep">ARKS</span>
         </Link>
 
@@ -142,7 +147,7 @@ export function Header() {
       >
         <div className="container-editorial flex items-center justify-between h-20 shrink-0">
           <span className="flex items-center gap-2.5">
-            <img src={logoEmblemLight} alt="ARKS" className="h-8 w-auto" />
+            <img src={logoEmblemLight} alt="ARKS" className="h-8 w-auto" width={26} height={32} />
             <span className="font-display text-2xl text-bone">ARKS</span>
           </span>
           <button onClick={() => setOpen(false)} aria-label="Kapat" className="p-2 -mr-2">

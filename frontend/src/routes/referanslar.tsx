@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
+import { useReferences } from "@/hooks/queries";
 
 export const Route = createFileRoute("/referanslar")({
   head: () => ({
@@ -14,15 +15,9 @@ export const Route = createFileRoute("/referanslar")({
   component: References,
 });
 
-const REFERENCES = [
-  "Aksa Enerji", "Borusan Mannesmann", "Çimsa Çimento", "Enerjisa",
-  "Ford Otosan", "İGA İstanbul Havalimanı", "Kalyon Holding", "Limak İnşaat",
-  "MNG Kargo", "Tekfen İnşaat", "Türk Telekom", "Zorlu Enerji",
-  "Anadolu Efes", "Arçelik", "Coca-Cola İçecek", "Doğuş İnşaat",
-  "ENKA İnşaat", "Eczacıbaşı", "Şişecam", "TAV Havalimanları",
-];
-
 function References() {
+  const { data: references = [] } = useReferences();
+
   return (
     <PageShell>
       <section className="pt-32 lg:pt-40 pb-16">
@@ -42,16 +37,20 @@ function References() {
 
       <section className="py-16">
         <div className="container-editorial">
-          <div className="grid grid-cols-2 md:grid-cols-4 border-t border-l border-forest-deep/20">
-            {REFERENCES.map((r) => (
-              <div
-                key={r}
-                className="aspect-[3/2] border-r border-b border-forest-deep/20 flex items-center justify-center p-6 text-center hover:bg-sage-soft/40 transition-colors"
-              >
-                <span className="font-display text-xl text-forest-deep">{r}</span>
-              </div>
-            ))}
-          </div>
+          {references.length === 0 ? (
+            <p className="text-muted-foreground text-center py-12">Henüz referans eklenmedi.</p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 border-t border-l border-forest-deep/20">
+              {references.map((r) => (
+                <div
+                  key={r.id}
+                  className="aspect-[3/2] border-r border-b border-forest-deep/20 flex items-center justify-center p-6 text-center hover:bg-sage-soft/40 transition-colors"
+                >
+                  <span className="font-display text-xl text-forest-deep">{r.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </PageShell>

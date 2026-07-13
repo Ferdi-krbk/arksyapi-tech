@@ -28,6 +28,8 @@ export function PageLoader() {
             src={emblem}
             alt="ARKS"
             className="w-24 h-auto md:w-28"
+            width={112}
+            height={138}
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

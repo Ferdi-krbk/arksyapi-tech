@@ -4,10 +4,12 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { AnimatePresence, motion } from "motion/react";
 
 import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
@@ -74,29 +76,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "robots", content: "index, follow" },
+      { name: "theme-color", content: "#1a3a2a" },
       { title: "ARKS Yapı Teknolojileri — Endüstriyel Yalıtım ve Kaplama Sistemleri" },
       {
         name: "description",
-        content:
-          "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman. ARKS ile yapılarınıza kalıcı ve elit koruma.",
+        content: "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman. ARKS ile yapılarınıza kalıcı ve elit koruma.",
       },
       { name: "author", content: "ARKS Yapı Teknolojileri" },
       { property: "og:title", content: "ARKS Yapı Teknolojileri — Endüstriyel Yalıtım ve Kaplama Sistemleri" },
       {
         property: "og:description",
-        content:
-          "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemleri.",
+        content: "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "tr_TR" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "ARKS Yapı Teknolojileri — Endüstriyel Yalıtım ve Kaplama Sistemleri" },
-      { name: "description", content: "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman. ARKS ile yapılarınıza kalıcı ve elit koruma." },
-      { property: "og:description", content: "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman. ARKS ile yapılarınıza kalıcı ve elit koruma." },
-      { name: "twitter:description", content: "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman. ARKS ile yapılarınıza kalıcı ve elit koruma." },
+      { name: "twitter:title", content: "ARKS Yapı Teknolojileri" },
+      {
+        name: "twitter:description",
+        content: "Polyurea, poliüretan, sürme izolasyon, zemin kaplama ve yeşil çatı sistemlerinde uzman.",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
     ],
   }),
   shellComponent: RootShell,
@@ -126,11 +132,22 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { location } = useRouterState();
 
   return (
     <QueryClientProvider client={queryClient}>
       <PageLoader />
-      <Outlet />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Outlet />
+        </motion.div>
+      </AnimatePresence>
     </QueryClientProvider>
   );
 }

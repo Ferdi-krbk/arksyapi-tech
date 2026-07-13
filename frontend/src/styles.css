@@ -5,12 +5,9 @@
 @import "@fontsource/urbanist/400.css";
 @import "@fontsource/urbanist/500.css";
 @import "@fontsource/urbanist/600.css";
-@import "@fontsource/urbanist/700.css";
-@import "@fontsource/urbanist/800.css";
 @import "@fontsource/epilogue/300.css";
 @import "@fontsource/epilogue/400.css";
 @import "@fontsource/epilogue/500.css";
-@import "@fontsource/epilogue/600.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -87,41 +84,55 @@
  | KOYU TEMA (dark mode) — tokenlar ters cevrilir
  ---------------------------------------------------------- */
 .dark {
-  --forest-deep: oklch(0.95 0.012 120);   /* metin/baslik -> acik */
-  --forest: oklch(0.82 0.06 150);          /* vurgu -> acik sage-yesil */
-  --sage: oklch(0.78 0.06 150);
-  --sage-soft: oklch(0.24 0.028 155);      /* yumusak yuzey -> koyu */
-  --bone: oklch(0.18 0.022 155);           /* sayfa zemini -> koyu */
-  --ink: oklch(0.95 0.01 100);
+  --forest-deep: oklch(0.93 0.015 120);
+  --forest: oklch(0.78 0.065 150);
+  --sage: oklch(0.72 0.065 150);
+  --sage-soft: oklch(0.23 0.028 155);
+  --bone: oklch(0.17 0.022 155);
+  --ink: oklch(0.94 0.01 100);
 
   --background: var(--bone);
   --foreground: var(--ink);
-  --card: oklch(0.22 0.026 155);
+  --card: oklch(0.20 0.024 155);
   --card-foreground: var(--ink);
-  --popover: oklch(0.22 0.026 155);
+  --popover: oklch(0.20 0.024 155);
   --popover-foreground: var(--ink);
   --primary: var(--forest-deep);
-  --primary-foreground: oklch(0.16 0.02 155);
+  --primary-foreground: oklch(0.15 0.02 155);
   --secondary: var(--sage-soft);
   --secondary-foreground: var(--forest-deep);
-  --muted: oklch(0.26 0.02 150);
-  --muted-foreground: oklch(0.75 0.025 150);
+  --muted: oklch(0.24 0.02 150);
+  --muted-foreground: oklch(0.72 0.025 150);
   --accent: var(--sage);
-  --accent-foreground: oklch(0.16 0.02 155);
-  --border: oklch(0.34 0.02 155);
-  --input: oklch(0.34 0.02 155);
+  --accent-foreground: oklch(0.15 0.02 155);
+  --border: oklch(0.32 0.02 155);
+  --input: oklch(0.32 0.02 155);
   --ring: var(--forest);
 }
 
-/* Bilincli koyu bolumler (footer, hero paneli, manifesto, menu) her temada
-   marka yesili panel olarak kalsin - sayfa zemininden biraz acik + yesil tonlu */
-.dark .bg-forest-deep { background-color: oklch(0.23 0.05 155); }
-/* Koyu zemin uzerindeki 'bone' yazilar acik kalsin */
-.dark [class*="text-bone"] { color: oklch(0.95 0.008 100); }
+/* Bilincli koyu bolumler (footer, hero paneli, manifesto, menu) */
+.dark .bg-forest-deep { background-color: oklch(0.22 0.045 155); }
+.dark [class*="text-bone"] { color: oklch(0.94 0.008 100); }
 
-/* Ana sayfa hero paneli: acik temada koyu yesil, koyu temada acik zemin */
+/* Hero panel: koyu temada acik zemin */
 .hero-panel { background-color: var(--forest-deep); }
-.dark .hero-panel { background-color: oklch(0.95 0.01 100); }
+.dark .hero-panel { background-color: oklch(0.94 0.01 100); }
+
+/* Form elementlerinin dark mode'da gorunurlugu */
+.dark input,
+.dark textarea,
+.dark select {
+  caret-color: var(--forest);
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: oklch(0.6 0.02 150);
+}
+
+/* Navigation link active state dark mode */
+.dark [class*="text-forest-deep"] {
+  color: var(--forest-deep);
+}
 
 @layer base {
   * {
@@ -141,7 +152,7 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
-    font-weight: 500;
+    font-weight: 600;
   }
   ::selection {
     background: var(--forest-deep);
@@ -198,4 +209,80 @@
 
 @utility marquee {
   animation: marquee-x 40s linear infinite;
+}
+
+@utility marquee-paused {
+  animation-play-state: paused;
+}
+
+/* Rich text content styles (from CMS) */
+@utility prose-editorial {
+  & h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--forest-deep);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+  & h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--forest-deep);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  & p {
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+  & ul, & ol {
+    margin: 1rem 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+  & ul {
+    list-style-type: disc;
+  }
+  & ol {
+    list-style-type: decimal;
+  }
+  & li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.25rem;
+  }
+  & li::marker {
+    color: var(--forest);
+  }
+  & strong {
+    font-weight: 600;
+    color: var(--forest-deep);
+  }
+  & a {
+    color: var(--forest);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  & a:hover {
+    color: var(--forest-deep);
+  }
+  & blockquote {
+    border-left: 3px solid var(--forest);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: var(--muted-foreground);
+  }
+  & img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+  }
+  & hr {
+    border: none;
+    height: 1px;
+    background: color-mix(in oklab, var(--forest-deep) 20%, transparent);
+    margin: 2rem 0;
+  }
 }

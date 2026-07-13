@@ -58,6 +58,11 @@ export const api = {
     return request<Row[]>("testimonials.php");
   },
 
+  /** GET /api/references.php */
+  references() {
+    return request<Row[]>("references.php");
+  },
+
   /** GET /api/pages.php  (?slug=) */
   pages(params?: string) {
     return request<Row[] | Row>(`pages.php${params ? `?${params}` : ""}`);

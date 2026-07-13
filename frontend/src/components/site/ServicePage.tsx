@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { PageShell } from "./PageShell";
 import { Reveal } from "./Reveal";
-import { SERVICES, type Service, getService } from "@/lib/services";
-import { api } from "@/integrations/api";
+import { SERVICES, getService } from "@/lib/services";
+import { useServices } from "@/hooks/queries";
 
 type ServiceFromApi = {
   id: number;
@@ -18,23 +17,17 @@ type ServiceFromApi = {
 
 export function ServicePage({ slug }: { slug: string }) {
   const staticEntry = getService(slug);
-  const [dbService, setDbService] = useState<ServiceFromApi | null>(null);
+  const { data: services = [] } = useServices();
 
-  useEffect(() => {
-    api.services().then((res) => {
-      const list = res.data as ServiceFromApi[];
-      const found = list.find((s) => s.slug === slug) ?? null;
-      setDbService(found);
-    }).catch(() => {});
-  }, [slug]);
+  const dbService = services.find((s) => s.slug === slug) ?? null;
 
-  // DB'de varsa oradan, yoksa statik veriden al
   const title   = dbService?.title || staticEntry?.title || slug;
   const tagline = dbService?.short_description || staticEntry?.tagline || "";
   const intro   = dbService?.short_description || staticEntry?.intro || "";
   const detail  = dbService?.content || staticEntry?.detail || "";
   const features = staticEntry?.features || [];
   const image   = dbService?.image_url || staticEntry?.image || "";
+  const imgPos  = staticEntry?.imagePosition || "center";
   const index   = staticEntry?.index || "";
 
   const others = SERVICES.filter((s) => s.slug !== slug);
@@ -72,8 +65,9 @@ export function ServicePage({ slug }: { slug: string }) {
             <motion.img
               src={image}
               alt={title}
-              className="w-full h-[60vh] object-cover"
-              width={1400}
+              className="w-full aspect-[16/9] max-h-[70vh] object-cover"
+              style={{ objectPosition: imgPos }}
+              width={1600}
               height={900}
               initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}

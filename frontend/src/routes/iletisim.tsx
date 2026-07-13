@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
-import { api } from "@/integrations/api";
+import { useSettings, useContactForm } from "@/hooks/queries";
 
 export const Route = createFileRoute("/iletisim")({
   head: () => ({
@@ -18,13 +19,8 @@ export const Route = createFileRoute("/iletisim")({
 
 function Contact() {
   const [sent, setSent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [settings, setSettings] = useState<Record<string, string | null>>({});
-
-  useEffect(() => {
-    api.settings().then((res) => setSettings(res.data as Record<string, string | null>)).catch(() => {});
-  }, []);
+  const { data: settings = {} } = useSettings();
+  const { mutateAsync: submitContact, isPending: submitting, error: mutationError } = useContactForm();
 
   const email       = settings.email || "info@arksyapi.com";
   const phone       = settings.phone || "+90 (000) 000 00 00";
@@ -33,8 +29,6 @@ function Contact() {
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
-    setSubmitting(true);
     const fd = new FormData(e.currentTarget);
     const payload = {
       fullname: String(fd.get("full_name") || "").trim(),
@@ -44,12 +38,9 @@ function Contact() {
       message: String(fd.get("message") || "").trim(),
     };
     try {
-      await api.contact(payload as Record<string, string>);
+      await submitContact(payload as Record<string, string>);
       setSent(true);
-    } catch {
-      setError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
-    }
-    setSubmitting(false);
+    } catch {}
   }
 
   return (
@@ -89,12 +80,17 @@ function Contact() {
 
           <Reveal className="col-span-12 md:col-span-6 md:col-start-7" delay={0.15}>
             {sent ? (
-              <div className="bg-sage-soft p-10 md:p-14">
+              <motion.div
+                className="bg-sage-soft p-10 md:p-14"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <p className="eyebrow text-forest mb-4">— Teşekkürler</p>
                 <p className="font-display text-3xl text-forest-deep">
                   Mesajınız iletildi. En kısa sürede dönüş yapacağız.
                 </p>
-              </div>
+              </motion.div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -126,13 +122,23 @@ function Contact() {
                   <span className="eyebrow text-forest">Proje Detayı</span>
                   <textarea name="message" required minLength={5} maxLength={5000} rows={5} className="mt-2 w-full bg-transparent border-b border-forest-deep/40 py-3 focus:border-forest-deep outline-none text-forest-deep resize-none" />
                 </label>
-                {error && <p className="text-sm text-red-700">{error}</p>}
+                {mutationError && <p className="text-sm text-red-700">Mesaj gönderilemedi. Lütfen tekrar deneyin.</p>}
                 <button
                   type="submit"
                   disabled={submitting}
                   className="inline-flex items-center gap-3 bg-forest-deep text-bone px-8 py-4 text-sm font-medium hover:bg-forest transition-colors disabled:opacity-60"
                 >
-                  {submitting ? "Gönderiliyor…" : "Mesajı gönder"} <span aria-hidden>→</span>
+                  {submitting ? (
+                    <span className="inline-flex items-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Gönderiliyor…
+                    </span>
+                  ) : (
+                    <>Mesajı gönder <span aria-hidden>→</span></>
+                  )}
                 </button>
               </form>
             )}
