@@ -1,7 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
 import { useReferences } from "@/hooks/queries";
+
+function bestCols(total: number): number {
+  if (total <= 4) return total;
+  let best = 4;
+  let bestRem = total;
+  for (let cols = 3; cols <= Math.min(6, total); cols++) {
+    const rem = total % cols;
+    if (rem === 0) return cols;
+    if (rem < bestRem || (rem === bestRem && cols > best)) {
+      best = cols;
+      bestRem = rem;
+    }
+  }
+  return best;
+}
 
 export const Route = createFileRoute("/referanslar")({
   head: () => ({
@@ -17,6 +33,7 @@ export const Route = createFileRoute("/referanslar")({
 
 function References() {
   const { data: references = [] } = useReferences();
+  const cols = useMemo(() => bestCols(references.length), [references.length]);
 
   return (
     <PageShell>
@@ -40,7 +57,10 @@ function References() {
           {references.length === 0 ? (
             <p className="text-muted-foreground text-center py-12">Henüz referans eklenmedi.</p>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div
+              className="grid gap-2"
+              style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+            >
               {references.map((r) => (
                 <div
                   key={r.id}
