@@ -44,9 +44,12 @@ function References() {
               {references.map((r) => (
                 <div
                   key={r.id}
-                  className="aspect-[3/2] border-r border-b border-forest-deep/20 flex items-center justify-center p-6 text-center hover:bg-sage-soft/40 transition-colors"
+                  className="aspect-[3/2] border-r border-b border-forest-deep/20 flex flex-col items-center justify-center p-6 text-center hover:bg-sage-soft/40 transition-colors gap-3"
                 >
-                  <span className="font-display text-xl text-forest-deep">{r.name}</span>
+                  {r.logo_url ? (
+                    <img src={r.logo_url} alt={r.name} className="h-10 w-auto max-w-[120px] object-contain opacity-80 group-hover:opacity-100 transition-opacity" loading="lazy" />
+                  ) : null}
+                  <span className="font-display text-lg text-forest-deep">{r.name}</span>
                 </div>
               ))}
             </div>

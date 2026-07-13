@@ -20,8 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($old['name'] === '') { $errors[] = 'Firma adi zorunludur.'; }
 
+    $logo = null;
     if (empty($errors)) {
-        (new Reference())->create($old);
+        try { $logo = upload_image($_FILES['logo'] ?? [], 'references'); }
+        catch (RuntimeException $ex) { $errors[] = $ex->getMessage(); }
+    }
+
+    if (empty($errors)) {
+        (new Reference())->create([
+            'name'=>$old['name'], 'description'=>$old['description'],
+            'logo_path'=>$logo, 'sort_order'=>$old['sort_order'], 'is_active'=>$old['is_active'],
+        ]);
         set_flash('success', 'Referans eklendi.');
         redirect('/admin/references/list.php');
     }
@@ -35,12 +44,14 @@ require __DIR__ . '/../partials/header.php';
         <a href="<?= BASE_URL ?>/admin/references/list.php" class="btn btn-secondary btn-sm">Geri</a></div>
     <div class="panel-body">
         <?php foreach ($errors as $err): ?><div class="alert alert-danger"><?= e($err) ?></div><?php endforeach; ?>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <?= csrf_field() ?>
             <div class="form-group"><label>Firma Adi *</label>
                 <input type="text" name="name" class="form-control" value="<?= e($old['name']) ?>" required></div>
+            <div class="form-group"><label>Logo (opsiyonel)</label>
+                <input type="file" name="logo" accept="image/*" class="form-control"></div>
             <div class="form-group"><label>Aciklama (opsiyonel)</label>
-                <input type="text" name="description" class="form-control" value="<?= e($old['description']) ?>" placeholder="orn. Proje tipi, sektor"></div>
+                <input type="text" name="description" class="form-control" value="<?= e($old['description']) ?>" placeholder="orn. Enerji sektoru"></div>
             <div class="form-row">
                 <div class="form-group"><label>Sira</label>
                     <input type="number" name="sort_order" class="form-control" value="<?= (int) $old['sort_order'] ?>"></div>

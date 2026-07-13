@@ -55,6 +55,8 @@ export type ReferenceItem = {
   id: number;
   name: string;
   description: string | null;
+  logo_path: string | null;
+  logo_url: string | null;
   sort_order: number;
   is_active: number;
 };

@@ -24,8 +24,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($name === '') { $errors[] = 'Firma adi zorunludur.'; }
 
+    $logo = $item['logo_path'] ?? null;
     if (empty($errors)) {
-        $model->update($id, compact('name','description','sort_order','is_active'));
+        try {
+            $uploaded = upload_image($_FILES['logo'] ?? [], 'references');
+            if ($uploaded) {
+                delete_upload($item['logo_path'] ?? null);
+                $logo = $uploaded;
+            }
+            if (input('remove_logo')) {
+                delete_upload($item['logo_path'] ?? null);
+                $logo = null;
+            }
+        } catch (RuntimeException $ex) { $errors[] = $ex->getMessage(); }
+    }
+
+    if (empty($errors)) {
+        $model->update($id, ['name'=>$name,'description'=>$description,'logo_path'=>$logo,'sort_order'=>$sort_order,'is_active'=>$is_active]);
         set_flash('success', 'Referans guncellendi.');
         redirect('/admin/references/list.php');
     }
@@ -40,10 +55,19 @@ require __DIR__ . '/../partials/header.php';
         <a href="<?= BASE_URL ?>/admin/references/list.php" class="btn btn-secondary btn-sm">Geri</a></div>
     <div class="panel-body">
         <?php foreach ($errors as $err): ?><div class="alert alert-danger"><?= e($err) ?></div><?php endforeach; ?>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <?= csrf_field() ?>
             <div class="form-group"><label>Firma Adi *</label>
                 <input type="text" name="name" class="form-control" value="<?= e($item['name']) ?>" required></div>
+            <div class="form-group"><label>Logo</label>
+                <?php if (!empty($item['logo_path'])): ?>
+                    <div style="margin-bottom:8px">
+                        <img src="<?= BASE_URL ?>/uploads/<?= e($item['logo_path']) ?>" style="max-height:50px" alt="">
+                        <label style="margin-left:8px"><input type="checkbox" name="remove_logo" value="1"> Logoyu kaldir</label>
+                    </div>
+                <?php endif; ?>
+                <input type="file" name="logo" accept="image/*" class="form-control">
+                <small>Yeni logo yuklerseniz eskisi degisir.</small></div>
             <div class="form-group"><label>Aciklama (opsiyonel)</label>
                 <input type="text" name="description" class="form-control" value="<?= e($item['description']) ?>"></div>
             <div class="form-row">

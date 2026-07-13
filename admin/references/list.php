@@ -23,10 +23,11 @@ require __DIR__ . '/../partials/header.php';
             <p class="text-muted">Henuz referans eklenmedi. Frontend'deki referans listesi bos gorunur.</p>
         <?php else: ?>
             <table>
-                <thead><tr><th>Sira</th><th>Firma Adi</th><th>Aciklama</th><th>Durum</th><th>Islem</th></tr></thead>
+                <thead><tr><th>Logo</th><th>Sira</th><th>Firma Adi</th><th>Aciklama</th><th>Durum</th><th>Islem</th></tr></thead>
                 <tbody>
                 <?php foreach ($items as $r): ?>
                     <tr>
+                        <td><?php if ($r['logo_path']): ?><img src="<?= BASE_URL ?>/uploads/<?= e($r['logo_path']) ?>" style="max-height:32px" alt=""><?php else: ?>-<?php endif; ?></td>
                         <td><?= (int) $r['sort_order'] ?></td>
                         <td><?= e($r['name']) ?></td>
                         <td><?= e($r['description'] ?: '-') ?></td>

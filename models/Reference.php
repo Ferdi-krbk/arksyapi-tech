@@ -4,7 +4,7 @@ if (!defined('APP_RUNNING')) { exit('Direct access not allowed.'); }
 class Reference extends Model
 {
     protected string $table = 'references';
-    protected array $fillable = ['name', 'description', 'sort_order', 'is_active'];
+    protected array $fillable = ['name', 'description', 'logo_path', 'sort_order', 'is_active'];
 
     public function active(): array
     {
