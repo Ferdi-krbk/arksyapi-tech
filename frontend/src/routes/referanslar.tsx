@@ -40,11 +40,11 @@ function References() {
           {references.length === 0 ? (
             <p className="text-muted-foreground text-center py-12">Henüz referans eklenmedi.</p>
           ) : (
-            <div className="flex flex-wrap justify-center bg-forest-deep/15 gap-px">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {references.map((r) => (
                 <div
                   key={r.id}
-                  className="relative w-[calc(50%-0.5px)] md:w-[calc(33.333%-0.5px)] lg:w-[calc(25%-0.5px)] aspect-[3/2] bg-bone dark:bg-bone flex items-center justify-center p-6 lg:p-8 text-center hover:bg-sage-soft/40 transition-colors overflow-hidden group"
+                  className="relative aspect-[3/2] flex items-center justify-center p-6 lg:p-8 text-center hover:bg-sage-soft/40 transition-colors overflow-hidden group border border-forest-deep/15"
                 >
                   {r.logo_url ? (
                     <img
