@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
 import { Testimonials } from "@/components/site/Testimonials";
-import { useSliders, useSettings, useReferences, settingsQueryOptions, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
+import { useSliders, useReferences, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
 import heroImg from "@/assets/hero-green-roof.jpg";
 import heroLogoImg from "@/assets/arks-hero-white.png";
 import heroLogoDark from "@/assets/arks-hero-dark.png";
@@ -11,7 +11,6 @@ import heroLogoDark from "@/assets/arks-hero-dark.png";
 export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     const { queryClient } = context;
-    queryClient.prefetchQuery(settingsQueryOptions());
     queryClient.prefetchQuery(slidersQueryOptions());
     queryClient.prefetchQuery(projectsQueryOptions());
   },
@@ -20,7 +19,6 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data: sliders = [] } = useSliders();
-  const { data: settings = {} } = useSettings();
   const { data: references = [] } = useReferences();
   const [activeIdx, setActiveIdx] = useState(0);
 
@@ -34,8 +32,6 @@ function Home() {
   const activeSlider = sliders[activeIdx] ?? null;
   const heroImage = activeSlider?.image_url || heroImg;
   const heroSub = activeSlider?.subtitle || "Kalıcı koruma.";
-  const heroBtn = activeSlider?.button_text;
-  const heroBtnUrl = activeSlider?.button_url;
 
   return (
     <PageShell>
@@ -56,14 +52,6 @@ function Home() {
               >
                 <span className="italic font-medium text-forest">{heroSub}</span>
               </motion.h1>
-              <motion.p
-                className="mt-8 max-w-xl text-base text-muted-foreground leading-relaxed"
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
-              >
-                ARKS Yapı Teknolojileri; polyurea, poliüretan ve sürme izolasyon sistemleriyle
-                yapılarınıza dikişsiz, monolitik ve ömür boyu dayanan bir zırh giydirir.
-              </motion.p>
               <motion.div
                 className="mt-10 flex flex-wrap items-center gap-6"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -125,65 +113,36 @@ function Home() {
             )}
           </motion.div>
 
-          {/* SPRAY GUN — püskürtme efekti */}
-          <div className="mt-16 mb-8">
+          {/* SPRAY GUN — slider alt yazisi puskurtme */}
+          {heroSub && (
+          <div className="mt-14 mb-6">
             <motion.div
               className="flex flex-wrap justify-center gap-x-2 gap-y-3"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
+              variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
             >
-              {[
-                "Polyurea",
-                "Poliüretan",
-                "Sürme İzolasyon",
-                "Zemin Kaplama",
-                "Yeşil Çatı",
-              ].map((word, i) => (
+              {heroSub.split(" ").map((word, i) => (
                 <motion.span
-                  key={word}
+                  key={i}
                   className="inline-block"
                   variants={{
-                    hidden: { opacity: 0, scale: 0, x: -80, filter: "blur(8px)" },
+                    hidden: { opacity: 0, scale: 0, x: -60, filter: "blur(8px)" },
                     visible: {
-                      opacity: 1,
-                      scale: 1,
-                      x: 0,
-                      filter: "blur(0px)",
-                      transition: {
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 18,
-                        mass: 0.6,
-                      },
+                      opacity: 1, scale: 1, x: 0, filter: "blur(0px)",
+                      transition: { type: "spring", stiffness: 350, damping: 16, mass: 0.5 },
                     },
                   }}
                 >
                   <span className="font-display text-4xl md:text-6xl font-light text-forest-deep/80">
                     {word}
                   </span>
-                  {i < 4 && (
-                    <span className="text-forest/20 mx-3 text-3xl relative -top-1">·</span>
-                  )}
                 </motion.span>
               ))}
             </motion.div>
           </div>
-
-          {/* Sirket alt metin */}
-          <div className="max-w-2xl mx-auto text-center pb-20">
-            <motion.p
-              className="text-muted-foreground leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              Endüstriyel yalıtım ve kaplama sistemlerinde uzman; yapılarınıza
-              dikişsiz, monolitik ve ömür boyu dayanan koruma sağlıyoruz.
-            </motion.p>
-          </div>
+          )}
         </div>
       </section>
 
