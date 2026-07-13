@@ -94,7 +94,7 @@ function Home() {
               koyu temada acik panel + koyu logo) */}
           <motion.div
             className="mt-20 relative overflow-hidden hero-panel flex items-center justify-center"
-            style={{ minHeight: "55vh" }}
+            style={{ minHeight: "38vh" }}
             initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -110,14 +110,14 @@ function Home() {
             <img
               src={heroLogoImg}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[65%] max-w-[380px] h-auto py-8 px-5 dark:hidden"
+              className="relative z-10 w-[60%] max-w-[300px] h-auto py-5 px-3 dark:hidden"
               width={800}
               height={202}
             />
             <img
               src={heroLogoDark}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[65%] max-w-[380px] h-auto py-8 px-5 hidden dark:block"
+              className="relative z-10 w-[60%] max-w-[300px] h-auto py-5 px-3 hidden dark:block"
               width={800}
               height={202}
             />
