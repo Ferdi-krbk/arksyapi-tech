@@ -40,17 +40,17 @@ function References() {
           {references.length === 0 ? (
             <p className="text-muted-foreground text-center py-12">Henüz referans eklenmedi.</p>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 border-t border-l border-forest-deep/20">
+            <div className="flex flex-wrap justify-center bg-forest-deep/15 gap-px">
               {references.map((r) => (
                 <div
                   key={r.id}
-                  className="relative aspect-[3/2] border-r border-b border-forest-deep/20 flex items-center justify-center p-8 text-center hover:bg-sage-soft/40 transition-colors overflow-hidden group"
+                  className="relative w-[calc(50%-0.5px)] md:w-[calc(33.333%-0.5px)] lg:w-[calc(25%-0.5px)] aspect-[3/2] bg-bone dark:bg-bone flex items-center justify-center p-6 lg:p-8 text-center hover:bg-sage-soft/40 transition-colors overflow-hidden group"
                 >
                   {r.logo_url ? (
                     <img
                       src={r.logo_url}
                       alt=""
-                      className="absolute inset-0 w-full h-full object-contain p-8 opacity-[0.08] group-hover:opacity-[0.15] transition-opacity duration-500 scale-125"
+                      className="absolute inset-0 w-full h-full object-contain p-8 opacity-[0.30] group-hover:opacity-[0.45] transition-opacity duration-500 scale-125"
                       loading="lazy"
                     />
                   ) : null}
