@@ -38,21 +38,13 @@ function Home() {
           <video
             autoPlay
             muted
-            loop
             playsInline
-            poster="/video/hero-spray.mp4"
             className="absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/video/hero-spray.mp4" type="video/mp4" />
-          </video>
-          {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/70 to-forest-deep/40" />
-          {/* Dot texture */}
-          <div
-            className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage: "radial-gradient(circle, #fff 0.5px, transparent 0.5px)",
-              backgroundSize: "20px 20px",
+            ref={(el) => {
+              if (!el) return;
+              const restart = () => { el.style.opacity = "0"; setTimeout(() => { el.currentTime = 0; el.play(); el.style.opacity = "1"; }, 300); };
+              el.addEventListener("ended", restart);
+              return () => el.removeEventListener("ended", restart);
             }}
           />
         </div>
