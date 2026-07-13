@@ -125,13 +125,13 @@ function Home() {
             )}
           </motion.div>
 
-          {/* SPRAY GUN — hizmetler efekti */}
-          <div className="mt-16 mb-8 overflow-hidden">
+          {/* SPRAY GUN — püskürtme efekti */}
+          <div className="mt-16 mb-8">
             <motion.div
-              className="flex flex-wrap justify-center gap-x-6 gap-y-3"
+              className="flex flex-wrap justify-center gap-x-2 gap-y-3"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={{ once: true, margin: "-50px" }}
               variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
             >
               {[
@@ -143,21 +143,28 @@ function Home() {
               ].map((word, i) => (
                 <motion.span
                   key={word}
-                  className="relative inline-block font-display text-4xl md:text-6xl font-light text-forest-deep/80"
+                  className="inline-block"
                   variants={{
-                    hidden: { opacity: 0, filter: "blur(12px)", scale: 1.3, y: -10 },
+                    hidden: { opacity: 0, scale: 0, x: -80, filter: "blur(8px)" },
                     visible: {
                       opacity: 1,
-                      filter: "blur(0px)",
                       scale: 1,
-                      y: 0,
-                      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                      x: 0,
+                      filter: "blur(0px)",
+                      transition: {
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 18,
+                        mass: 0.6,
+                      },
                     },
                   }}
                 >
-                  {word}
+                  <span className="font-display text-4xl md:text-6xl font-light text-forest-deep/80">
+                    {word}
+                  </span>
                   {i < 4 && (
-                    <span className="text-forest/30 mx-2">·</span>
+                    <span className="text-forest/20 mx-3 text-3xl relative -top-1">·</span>
                   )}
                 </motion.span>
               ))}
