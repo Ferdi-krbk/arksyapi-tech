@@ -63,17 +63,17 @@ export function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="container-editorial flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <img src={logoEmblem} alt="ARKS" className="h-7 w-auto dark:hidden" width={23} height={28} />
-          <img src={logoEmblemLight} alt="ARKS" className="h-7 w-auto hidden dark:block" width={23} height={28} />
-          <span className="font-display text-xl font-medium tracking-tight text-forest-deep">ARKS</span>
+      <div className="container-editorial flex items-center justify-between h-24">
+        <Link to="/" className="flex items-center gap-3 group">
+          <img src={logoEmblem} alt="ARKS" className="h-10 w-auto dark:hidden" width={33} height={40} />
+          <img src={logoEmblemLight} alt="ARKS" className="h-10 w-auto hidden dark:block" width={33} height={40} />
+          <span className="font-display text-2xl font-medium tracking-tight text-forest-deep">ARKS</span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-7">
+        <nav className="hidden lg:flex items-center gap-10">
           <Link
             to="/"
-            className="text-[13px] font-medium text-forest-deep/75 hover:text-forest-deep transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-forest-deep hover:after:w-full after:transition-all after:duration-300"
+            className="text-[14px] font-medium text-forest-deep/75 hover:text-forest-deep transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-forest-deep hover:after:w-full after:transition-all after:duration-300"
             activeProps={{ className: "text-forest-deep after:w-full" }}
           >
             Anasayfa
@@ -81,12 +81,12 @@ export function Header() {
 
           {/* Hizmetler acilir menu */}
           <div className="relative group">
-            <button className="text-[13px] font-medium text-forest-deep/75 group-hover:text-forest-deep transition-colors inline-flex items-center gap-1.5">
+            <button className="text-[14px] font-medium text-forest-deep/75 group-hover:text-forest-deep transition-colors inline-flex items-center gap-1.5">
               Hizmetler
               <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
             </button>
             <div className="absolute left-1/2 -translate-x-1/2 top-full pt-4 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200">
-              <div className="bg-bone border border-border shadow-xl min-w-[220px] py-1.5">
+              <div className="bg-bone border border-border shadow-xl min-w-[250px] py-2">
                 {SERVICES_NAV.map((s) => (
                   <Link
                     key={s.to}
@@ -108,7 +108,7 @@ export function Header() {
             <Link
               key={n.to}
               to={n.to}
-              className="text-[13px] font-medium text-forest-deep/75 hover:text-forest-deep transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-forest-deep hover:after:w-full after:transition-all after:duration-300"
+              className="text-[14px] font-medium text-forest-deep/75 hover:text-forest-deep transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-forest-deep hover:after:w-full after:transition-all after:duration-300"
               activeProps={{ className: "text-forest-deep after:w-full" }}
             >
               {n.label}
@@ -120,7 +120,7 @@ export function Header() {
           <ThemeToggle />
           <Link
             to="/iletisim"
-            className="hidden md:inline-flex items-center gap-2 border border-forest-deep text-forest-deep px-5 py-2.5 text-[13px] font-medium hover:bg-forest-deep hover:text-bone transition-colors"
+            className="hidden md:inline-flex items-center gap-2 border border-forest-deep text-forest-deep px-5 py-2.5 text-[14px] font-medium hover:bg-forest-deep hover:text-bone transition-colors"
           >
             İletişim
             <span aria-hidden>→</span>
@@ -145,10 +145,10 @@ export function Header() {
         exit={{ opacity: 0, clipPath: "circle(0% at 92% 6%)" }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="container-editorial flex items-center justify-between h-16 shrink-0">
+        <div className="container-editorial flex items-center justify-between h-20 shrink-0">
           <span className="flex items-center gap-2.5">
-            <img src={logoEmblemLight} alt="ARKS" className="h-7 w-auto" width={23} height={28} />
-            <span className="font-display text-xl text-bone">ARKS</span>
+            <img src={logoEmblemLight} alt="ARKS" className="h-8 w-auto" width={26} height={32} />
+            <span className="font-display text-2xl text-bone">ARKS</span>
           </span>
           <button onClick={() => setOpen(false)} aria-label="Kapat" className="p-2 -mr-2">
             <X className="w-6 h-6" />
