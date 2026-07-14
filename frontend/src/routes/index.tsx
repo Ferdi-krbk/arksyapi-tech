@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
 import { Testimonials } from "@/components/site/Testimonials";
+import { SprayHero } from "@/components/site/SprayHero";
 import { useSliders, useReferences, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
 import heroLogoImg from "@/assets/arks-hero-white.png";
 import heroLogoDark from "@/assets/arks-hero-dark.png";
@@ -31,88 +32,11 @@ function Home() {
 
   return (
     <PageShell>
-      {/* ─── VIDEO HERO ─── */}
-      <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
-        {/* Background video */}
-        <div className="absolute inset-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Hero content */}
-        <div className="container-editorial relative z-10 pb-24 lg:pb-32">
-          <div className="max-w-5xl">
-            <motion.p
-              className="eyebrow text-sage mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease }}
-            >
-              — Est. Endüstriyel Yalıtım
-            </motion.p>
-
-            <motion.h1
-              className="font-display text-3xl md:text-6xl font-medium text-bone leading-[1.05] tracking-[-0.02em]"
-              initial={{ clipPath: "inset(0 100% 0 0)" }}
-              animate={{ clipPath: "inset(0 0% 0 0)" }}
-              transition={{ duration: 1, delay: 0.3, ease }}
-            >
-              Polyurea ve poliüretan
-            </motion.h1>
-
-            <motion.p
-              className="font-display text-3xl md:text-6xl italic font-light text-sage mt-1 leading-[1.05] tracking-[-0.02em]"
-              initial={{ clipPath: "inset(0 100% 0 0)" }}
-              animate={{ clipPath: "inset(0 0% 0 0)" }}
-              transition={{ duration: 1, delay: 0.7, ease }}
-            >
-              çözümleri
-            </motion.p>
-
-            <motion.div
-              className="mt-12 flex flex-wrap items-center gap-6"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.4, ease }}
-            >
-              <Link
-                to="/projeler"
-                className="group inline-flex items-center gap-3 bg-bone text-forest-deep px-8 py-4 text-sm font-medium hover:bg-sage-soft transition-colors duration-300"
-              >
-                Tamamlanan Projeler
-                <span className="transition-transform duration-300 group-hover:translate-x-1" aria-hidden>→</span>
-              </Link>
-              <Link
-                to="/iletisim"
-                className="text-sm text-bone/80 underline underline-offset-8 decoration-1 hover:text-bone transition-all"
-              >
-                Teklif alın
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Slider dots */}
-        {sliders.length > 1 && (
-          <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12 flex gap-2 z-20">
-            {sliders.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveIdx(i)}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  i === activeIdx ? "bg-bone scale-125" : "bg-bone/30 hover:bg-bone/60"
-                }`}
-                aria-label={`Slider ${i + 1}`}
-              />
-            ))}
-          </div>
-        )}
-      </section>
+      {/* ─── SPRAY HERO ─── */}
+      <SprayHero
+        headline="Polyurea ve"
+        subheadline="poliüretan çözümleri"
+      />
 
       {/* ─── HERO PANEL — ARKS logosu ─── */}
       <motion.div
