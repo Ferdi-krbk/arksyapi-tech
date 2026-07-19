@@ -14,10 +14,48 @@ $item = $model->find($id);
 if (!$item) { set_flash('error', 'Proje bulunamadi.'); redirect('/admin/projects/list.php'); }
 
 $categories = (new ProjectCategory())->all('name ASC');
+$imageModel = new ProjectImage();
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
+    $action = (string) input('action', '');
+
+    // --- Proje gorseli sil ---
+    if ($action === 'delete_image') {
+        $imgId = (int) input('image_id', 0);
+        $img = $imageModel->find($imgId);
+        if ($img && (int) $img['project_id'] === $id) {
+            delete_upload($img['image_path']);
+            $imageModel->delete($imgId);
+            set_flash('success', 'Görsel silindi.');
+        }
+        redirect('/admin/projects/edit.php?id=' . $id);
+    }
+
+    // --- Proje gorselleri ekle (coklu) ---
+    if ($action === 'add_images') {
+        $files = $_FILES['images'] ?? null;
+        $added = 0;
+        if ($files && is_array($files['name'])) {
+            for ($i = 0; $i < count($files['name']); $i++) {
+                if (($files['error'][$i] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) continue;
+                $single = [
+                    'name' => $files['name'][$i], 'type' => $files['type'][$i],
+                    'tmp_name' => $files['tmp_name'][$i], 'error' => $files['error'][$i],
+                    'size' => $files['size'][$i],
+                ];
+                try {
+                    $path = upload_image($single, 'projects');
+                    if ($path) { $imageModel->create(['project_id' => $id, 'image_path' => $path, 'caption' => null, 'sort_order' => $i]); $added++; }
+                } catch (RuntimeException $ex) { set_flash('error', $ex->getMessage()); }
+            }
+        }
+        set_flash('success', "$added görsel eklendi.");
+        redirect('/admin/projects/edit.php?id=' . $id);
+    }
+
+    // --- Ana proje guncelleme ---
     $title           = trim((string) input('title', ''));
     $category_id     = input('category_id', '') ?: null;
     $client_name     = trim((string) input('client_name', ''));
@@ -50,6 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item = array_merge($item, compact('title','category_id','client_name','location',
         'completion_date','summary','content','is_featured','is_active'));
 }
+
+$projectImages = $model->images($id);
 
 require __DIR__ . '/../partials/header.php';
 ?>

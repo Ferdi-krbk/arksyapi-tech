@@ -21,3 +21,5 @@ frontend/node_modules/
 frontend/.output/
 frontend/.tanstack/
 frontend/dist/
+
+frontend/src/assets/*.zip

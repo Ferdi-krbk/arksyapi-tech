@@ -52,6 +52,7 @@ function nav_link(string $key, string $active, string $url, string $label, ?int 
             <?= nav_link('services', $active, '/admin/services/list.php', 'Hizmetler') ?>
             <?= nav_link('gallery', $active, '/admin/gallery/list.php', 'Galeri') ?>
             <?= nav_link('sliders', $active, '/admin/sliders/list.php', 'Slider') ?>
+            <?= nav_link('testimonials', $active, '/admin/testimonials/list.php', 'Yorumlar') ?>
             <?= nav_link('pages', $active, '/admin/pages/list.php', 'Sayfalar') ?>
             <?= nav_link('messages', $active, '/admin/messages/list.php', 'Mesajlar', $unreadMessages) ?>
             <?php if (current_role() === 'Administrator'): ?>
