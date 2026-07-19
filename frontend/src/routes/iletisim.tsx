@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
+import { Reveal } from "@/components/site/Reveal";
 import { api } from "@/integrations/api";
 
 export const Route = createFileRoute("/iletisim")({
@@ -56,35 +57,37 @@ function Contact() {
       <section className="pt-32 lg:pt-40 pb-16">
         <div className="container-editorial grid grid-cols-12 gap-10">
           <div className="col-span-12 md:col-span-5">
+            <Reveal>
             <p className="eyebrow text-forest mb-6">— İletişim</p>
             <h1 className="display-lg text-forest-deep">
               Bir sonraki<br /> yapı için.
             </h1>
+            </Reveal>
             <div className="mt-14 space-y-8">
               <div>
-                <p className="eyebrow text-forest mb-2">Adres</p>
-                <p className="text-forest-deep">{address}</p>
+                <p className="font-display text-xl text-forest-deep mb-1">Adres</p>
+                <p className="text-muted-foreground">{address}</p>
               </div>
               <div>
-                <p className="eyebrow text-forest mb-2">E-posta</p>
-                <a href={`mailto:${email}`} className="text-forest-deep hover:text-forest">
+                <p className="font-display text-xl text-forest-deep mb-1">E-posta</p>
+                <a href={`mailto:${email}`} className="text-muted-foreground hover:text-forest transition-colors">
                   {email}
                 </a>
               </div>
               <div>
-                <p className="eyebrow text-forest mb-2">Telefon</p>
-                <a href={`tel:${phone.replace(/\s/g,"")}`} className="text-forest-deep hover:text-forest">
+                <p className="font-display text-xl text-forest-deep mb-1">Telefon</p>
+                <a href={`tel:${phone.replace(/\s/g,"")}`} className="text-muted-foreground hover:text-forest transition-colors">
                   {phone}
                 </a>
               </div>
               <div>
-                <p className="eyebrow text-forest mb-2">Çalışma Saatleri</p>
-                <p className="text-forest-deep">{workingHours}</p>
+                <p className="font-display text-xl text-forest-deep mb-1">Çalışma Saatleri</p>
+                <p className="text-muted-foreground">{workingHours}</p>
               </div>
             </div>
           </div>
 
-          <div className="col-span-12 md:col-span-6 md:col-start-7">
+          <Reveal className="col-span-12 md:col-span-6 md:col-start-7" delay={0.15}>
             {sent ? (
               <div className="bg-sage-soft p-10 md:p-14">
                 <p className="eyebrow text-forest mb-4">— Teşekkürler</p>
@@ -133,7 +136,7 @@ function Contact() {
                 </button>
               </form>
             )}
-          </div>
+          </Reveal>
         </div>
       </section>
     </PageShell>

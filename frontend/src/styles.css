@@ -83,6 +83,46 @@
   --ring: var(--forest);
 }
 
+/* ----------------------------------------------------------
+ | KOYU TEMA (dark mode) — tokenlar ters cevrilir
+ ---------------------------------------------------------- */
+.dark {
+  --forest-deep: oklch(0.95 0.012 120);   /* metin/baslik -> acik */
+  --forest: oklch(0.82 0.06 150);          /* vurgu -> acik sage-yesil */
+  --sage: oklch(0.78 0.06 150);
+  --sage-soft: oklch(0.24 0.028 155);      /* yumusak yuzey -> koyu */
+  --bone: oklch(0.18 0.022 155);           /* sayfa zemini -> koyu */
+  --ink: oklch(0.95 0.01 100);
+
+  --background: var(--bone);
+  --foreground: var(--ink);
+  --card: oklch(0.22 0.026 155);
+  --card-foreground: var(--ink);
+  --popover: oklch(0.22 0.026 155);
+  --popover-foreground: var(--ink);
+  --primary: var(--forest-deep);
+  --primary-foreground: oklch(0.16 0.02 155);
+  --secondary: var(--sage-soft);
+  --secondary-foreground: var(--forest-deep);
+  --muted: oklch(0.26 0.02 150);
+  --muted-foreground: oklch(0.75 0.025 150);
+  --accent: var(--sage);
+  --accent-foreground: oklch(0.16 0.02 155);
+  --border: oklch(0.34 0.02 155);
+  --input: oklch(0.34 0.02 155);
+  --ring: var(--forest);
+}
+
+/* Bilincli koyu bolumler (footer, hero paneli, manifesto, menu) her temada
+   marka yesili panel olarak kalsin - sayfa zemininden biraz acik + yesil tonlu */
+.dark .bg-forest-deep { background-color: oklch(0.23 0.05 155); }
+/* Koyu zemin uzerindeki 'bone' yazilar acik kalsin */
+.dark [class*="text-bone"] { color: oklch(0.95 0.008 100); }
+
+/* Ana sayfa hero paneli: acik temada koyu yesil, koyu temada acik zemin */
+.hero-panel { background-color: var(--forest-deep); }
+.dark .hero-panel { background-color: oklch(0.95 0.01 100); }
+
 @layer base {
   * {
     border-color: var(--color-border);

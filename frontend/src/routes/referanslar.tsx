@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageShell } from "@/components/site/PageShell";
+import { Reveal } from "@/components/site/Reveal";
 
 export const Route = createFileRoute("/referanslar")({
   head: () => ({
@@ -26,6 +27,7 @@ function References() {
     <PageShell>
       <section className="pt-32 lg:pt-40 pb-16">
         <div className="container-editorial">
+          <Reveal>
           <p className="eyebrow text-forest mb-6">— Referanslar</p>
           <h1 className="display-lg text-forest-deep max-w-4xl">
             Güvenin<br /> <span className="italic font-light">kısa listesi.</span>
@@ -34,6 +36,7 @@ function References() {
             Türkiye'nin önde gelen sanayi, enerji ve inşaat firmaları
             uzun soluklu projelerinde ARKS Yapı Teknolojileri ile çalışıyor.
           </p>
+          </Reveal>
         </div>
       </section>
 

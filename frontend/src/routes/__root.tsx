@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
+import { PageLoader } from "../components/site/PageLoader";
 
 function NotFoundComponent() {
   return (
@@ -108,6 +109,11 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="tr">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
@@ -123,6 +129,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <PageLoader />
       <Outlet />
     </QueryClientProvider>
   );

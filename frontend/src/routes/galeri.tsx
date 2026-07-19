@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/site/PageShell";
+import { Reveal } from "@/components/site/Reveal";
 import { api } from "@/integrations/api";
 
 export const Route = createFileRoute("/galeri")({
@@ -32,8 +33,10 @@ function Gallery() {
     <PageShell>
       <section className="pt-32 lg:pt-40 pb-16">
         <div className="container-editorial">
+          <Reveal>
           <p className="eyebrow text-forest mb-6">— Galeri</p>
           <h1 className="display-lg text-forest-deep max-w-4xl">Sahadan <span className="italic font-light">kareler.</span></h1>
+          </Reveal>
         </div>
       </section>
       <section className="pb-24">

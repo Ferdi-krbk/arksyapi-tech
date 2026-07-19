@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { PageShell } from "./PageShell";
+import { Reveal } from "./Reveal";
 import { SERVICES, type Service, getService } from "@/lib/services";
 import { api } from "@/integrations/api";
 
@@ -42,25 +44,39 @@ export function ServicePage({ slug }: { slug: string }) {
       <section className="pt-32 lg:pt-40 pb-16">
         <div className="container-editorial">
           <div className="grid grid-cols-12 gap-6 items-end mb-16">
-            <div className="col-span-2 md:col-span-1">
+            <motion.div className="col-span-2 md:col-span-1"
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
               <p className="eyebrow text-forest">{index}</p>
-            </div>
+            </motion.div>
             <div className="col-span-10 md:col-span-11">
-              <p className="eyebrow text-forest mb-6">— Hizmet</p>
-              <h1 className="display-lg text-forest-deep">{title}</h1>
-              <p className="mt-8 font-display text-2xl md:text-3xl text-forest max-w-2xl font-light italic">
+              <motion.p className="eyebrow text-forest mb-6"
+                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+              >— Hizmet</motion.p>
+              <motion.h1 className="display-lg text-forest-deep"
+                initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+              >{title}</motion.h1>
+              <motion.p className="mt-8 font-display text-2xl md:text-3xl text-forest max-w-2xl font-light italic"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              >
                 {tagline}
-              </p>
+              </motion.p>
             </div>
           </div>
 
           {image && (
-            <img
+            <motion.img
               src={image}
               alt={title}
               className="w-full h-[60vh] object-cover"
               width={1400}
               height={900}
+              initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             />
           )}
         </div>
@@ -69,24 +85,31 @@ export function ServicePage({ slug }: { slug: string }) {
       <section className="py-20">
         <div className="container-editorial grid grid-cols-12 gap-10">
           <div className="col-span-12 md:col-span-5">
+            <Reveal>
             <p className="eyebrow text-forest mb-6">— Sistem</p>
             <p className="text-forest-deep font-display text-2xl leading-snug">
               {intro}
             </p>
+            </Reveal>
 
-            {/* Ozellikler — Sistem basliginin altindaki bosluga */}
+            {/* Ozellikler — madde madde, estetik liste */}
             {features.length > 0 && (
-              <div className="mt-10 grid grid-cols-2 gap-px bg-forest-deep/15 border border-forest-deep/15">
+              <ul className="mt-10 space-y-3">
                 {features.map((f, i) => (
-                  <div key={f} className="bg-bone p-5 flex flex-col gap-3 min-h-[130px]">
-                    <span className="eyebrow text-forest">0{i + 1}</span>
-                    <span className="text-forest-deep font-display text-base leading-snug">{f}</span>
-                  </div>
+                  <motion.li key={f} className="flex items-start gap-4 border-b border-forest-deep/10 pb-3"
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <span className="eyebrow text-forest/60 text-sm pt-1 tabular-nums">0{i + 1}</span>
+                    <span className="text-forest-deep leading-snug">{f}</span>
+                  </motion.li>
                 ))}
-              </div>
+              </ul>
             )}
           </div>
-          <div className="col-span-12 md:col-span-6 md:col-start-7">
+          <Reveal className="col-span-12 md:col-span-6 md:col-start-7" delay={0.1}>
             <p className="text-lg text-muted-foreground leading-relaxed">
               {detail}
             </p>
@@ -96,17 +119,19 @@ export function ServicePage({ slug }: { slug: string }) {
             >
               Bu sistem için teklif al <span aria-hidden>→</span>
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="py-24 border-t border-forest-deep/15">
         <div className="container-editorial">
-          <p className="eyebrow text-forest mb-10">— Diğer Sistemler</p>
+          <Reveal>
+            <p className="eyebrow text-forest mb-10">— Diğer Sistemler</p>
+          </Reveal>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {others.map((s) => (
+            {others.map((s, i) => (
+              <Reveal key={s.slug} delay={i * 0.08}>
               <Link
-                key={s.slug}
                 to={s.to}
                 className="group block border-t border-forest-deep/20 pt-6 hover:border-forest-deep transition-colors"
               >
@@ -116,6 +141,7 @@ export function ServicePage({ slug }: { slug: string }) {
                 </p>
                 <p className="text-sm text-muted-foreground mt-3">{s.tagline}</p>
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>

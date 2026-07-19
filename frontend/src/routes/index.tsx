@@ -1,10 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
+import { Reveal } from "@/components/site/Reveal";
+import { Counter } from "@/components/site/Counter";
+import { Testimonials } from "@/components/site/Testimonials";
 import { SERVICES } from "@/lib/services";
 import { api } from "@/integrations/api";
 import heroImg from "@/assets/hero-green-roof.jpg";
-import heroLogoImg from "@/assets/arks-hero-logo.png";
+import heroLogoImg from "@/assets/arks-hero-white.png";
+import heroLogoDark from "@/assets/arks-hero-dark.png";
 import projectIndustrial from "@/assets/project-industrial.jpg";
 import projectGreenRoof from "@/assets/project-green-roof.jpg";
 import projectMembrane from "@/assets/project-membrane.jpg";
@@ -70,16 +75,32 @@ function Home() {
         <div className="container-editorial">
           <div className="grid grid-cols-12 gap-6 lg:gap-10 items-end">
             <div className="col-span-12 lg:col-span-7 xl:col-span-8">
-              <p className="eyebrow text-forest mb-8">— Est. Endüstriyel Yalıtım</p>
-              <h1 className="display-lg text-forest-deep">
+              <motion.p
+                className="eyebrow text-forest mb-8"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              >— Est. Endüstriyel Yalıtım</motion.p>
+              <motion.h1
+                className="display-lg text-forest-deep"
+                initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+              >
                 Sessiz güç.<br />
-                <span className="italic font-light text-forest">Kalıcı</span> koruma.
-              </h1>
-              <p className="mt-10 max-w-xl text-lg text-muted-foreground leading-relaxed">
+                <span className="italic font-medium text-forest">Kalıcı</span> koruma.
+              </motion.h1>
+              <motion.p
+                className="mt-10 max-w-xl text-lg text-muted-foreground leading-relaxed"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              >
                 ARKS Yapı Teknolojileri; polyurea, poliüretan ve sürme izolasyon sistemleriyle
                 yapılarınıza dikişsiz, monolitik ve ömür boyu dayanan bir zırh giydirir.
-              </p>
-              <div className="mt-10 flex flex-wrap items-center gap-6">
+              </motion.p>
+              <motion.div
+                className="mt-10 flex flex-wrap items-center gap-6"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <Link
                   to="/projeler"
                   className="group inline-flex items-center gap-3 bg-forest-deep text-bone px-7 py-4 text-sm font-medium hover:bg-forest transition-colors"
@@ -90,37 +111,43 @@ function Home() {
                 <Link to="/iletisim" className="text-sm text-forest-deep underline underline-offset-8 decoration-1 hover:decoration-2">
                   Teklif alın
                 </Link>
-              </div>
+              </motion.div>
             </div>
             <div className="col-span-12 lg:col-span-5 xl:col-span-4">
               <div className="hidden lg:block rule-line mb-8" />
               <dl className="grid grid-cols-2 gap-x-6 gap-y-8">
                 <div>
                   <dt className="eyebrow text-forest/70">Deneyim</dt>
-                  <dd className="display-lg text-forest-deep mt-2">10+</dd>
+                  <dd className="display-lg text-forest-deep mt-2"><Counter value={10} suffix="+" /></dd>
                   <p className="mt-1 text-xs text-muted-foreground">Yıl saha uygulaması</p>
                 </div>
                 <div>
                   <dt className="eyebrow text-forest/70">Proje</dt>
-                  <dd className="display-lg text-forest-deep mt-2">100+</dd>
+                  <dd className="display-lg text-forest-deep mt-2"><Counter value={100} suffix="+" /></dd>
                   <p className="mt-1 text-xs text-muted-foreground">Tamamlanan iş</p>
                 </div>
                 <div>
                   <dt className="eyebrow text-forest/70">Sistem</dt>
-                  <dd className="display-lg text-forest-deep mt-2">05</dd>
+                  <dd className="display-lg text-forest-deep mt-2"><Counter value={5} prefix="0" /></dd>
                   <p className="mt-1 text-xs text-muted-foreground">Uzmanlık alanı</p>
                 </div>
                 <div>
                   <dt className="eyebrow text-forest/70">Memnuniyet</dt>
-                  <dd className="display-lg text-forest-deep mt-2">100+</dd>
+                  <dd className="display-lg text-forest-deep mt-2"><Counter value={100} suffix="+" /></dd>
                   <p className="mt-1 text-xs text-muted-foreground">Memnun müşteri</p>
                 </div>
               </dl>
             </div>
           </div>
 
-          {/* Hero — buyuk ARKS logosu (slider varsa o, yoksa logo) */}
-          <div className="mt-20 relative overflow-hidden bg-forest-deep flex items-center justify-center" style={{ minHeight: "70vh" }}>
+          {/* Hero — buyuk ARKS logosu (acik temada koyu yesil panel + beyaz logo,
+              koyu temada acik panel + koyu logo) */}
+          <motion.div
+            className="mt-20 relative overflow-hidden hero-panel flex items-center justify-center"
+            style={{ minHeight: "70vh" }}
+            initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
             {activeSlider?.image_url ? (
               <img
                 src={heroImage}
@@ -133,7 +160,12 @@ function Home() {
             <img
               src={heroLogoImg}
               alt="ARKS Yapı Teknolojileri"
-              className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8"
+              className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8 dark:hidden"
+            />
+            <img
+              src={heroLogoDark}
+              alt="ARKS Yapı Teknolojileri"
+              className="relative z-10 w-[85%] max-w-[800px] h-auto py-16 px-8 hidden dark:block"
             />
             {sliders.length > 1 && (
               <div className="absolute top-6 right-6 md:top-10 md:right-10 flex gap-2 z-20">
@@ -144,7 +176,7 @@ function Home() {
                 ))}
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Sirket tanitimi — hero'nun altinda */}
           <div className="mt-10 max-w-3xl">
@@ -164,21 +196,23 @@ function Home() {
       {/* SERVICES — vertical numbered index */}
       <section className="py-24 lg:py-40 bg-bone">
         <div className="container-editorial">
-          <div className="grid grid-cols-12 gap-6 mb-16">
-            <div className="col-span-12 md:col-span-4">
-              <p className="eyebrow text-forest">— Hizmet Alanlarımız</p>
+          <Reveal>
+            <div className="grid grid-cols-12 gap-6 mb-16">
+              <div className="col-span-12 md:col-span-4">
+                <p className="eyebrow text-forest">— Hizmet Alanlarımız</p>
+              </div>
+              <div className="col-span-12 md:col-span-8">
+                <h2 className="display-lg text-forest-deep max-w-2xl">
+                  Beş sistem. Tek bir <span className="italic font-light">disiplin.</span>
+                </h2>
+              </div>
             </div>
-            <div className="col-span-12 md:col-span-8">
-              <h2 className="display-lg text-forest-deep max-w-2xl">
-                Beş sistem. Tek bir <span className="italic font-light">disiplin.</span>
-              </h2>
-            </div>
-          </div>
+          </Reveal>
 
           <div className="border-t border-forest-deep/20">
-            {SERVICES.map((s) => (
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.slug} delay={i * 0.06}>
               <Link
-                key={s.slug}
                 to={s.to}
                 className="group grid grid-cols-12 gap-6 items-center py-8 lg:py-12 border-b border-forest-deep/20 hover:bg-sage-soft/40 transition-colors -mx-6 px-6 md:-mx-10 md:px-10"
               >
@@ -204,6 +238,7 @@ function Home() {
                   </span>
                 </div>
               </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -216,22 +251,24 @@ function Home() {
             <p className="eyebrow text-sage">— Manifesto</p>
           </div>
           <div className="col-span-12 md:col-span-9">
+            <Reveal>
             <p className="font-display text-3xl md:text-5xl leading-tight font-light">
               Yalıtım, görünmeyen bir sanattır.
               <span className="text-sage"> Zamanla değil, zamana rağmen ölçülür.</span>
               Her uygulamada moleküler hassasiyet, saha disiplini ve mimari
               hürmet aynı anda çalışır.
             </p>
+            </Reveal>
             <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10">
               {[
                 { t: "Malzeme", d: "Yalnızca uluslararası sertifikalı reçine ve sistemler." },
                 { t: "Uygulama", d: "Fabrika seviyesinde ekipman ile eğitimli saha ekipleri." },
                 { t: "Garanti", d: "10 yıla varan sistem güvencesi ve düzenli denetim." },
-              ].map((x) => (
-                <div key={x.t}>
+              ].map((x, i) => (
+                <Reveal key={x.t} delay={i * 0.1}>
                   <p className="eyebrow text-sage mb-3">{x.t}</p>
                   <p className="text-bone/85 leading-relaxed">{x.d}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -241,15 +278,17 @@ function Home() {
       {/* FEATURED PROJECTS — API'den dinamik */}
       <section className="py-24 lg:py-40">
         <div className="container-editorial">
-          <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
-            <div>
-              <p className="eyebrow text-forest mb-4">— Seçili Projeler</p>
-              <h2 className="display-lg text-forest-deep">Sahada, ölçekte, sessizce.</h2>
+          <Reveal>
+            <div className="flex items-end justify-between mb-16 flex-wrap gap-6">
+              <div>
+                <p className="eyebrow text-forest mb-4">— Seçili Projeler</p>
+                <h2 className="display-lg text-forest-deep">Sahada, ölçekte, sessizce.</h2>
+              </div>
+              <Link to="/projeler" className="text-sm text-forest-deep border-b border-forest-deep pb-1 hover:pb-2 transition-all">
+                Tüm projeler →
+              </Link>
             </div>
-            <Link to="/projeler" className="text-sm text-forest-deep border-b border-forest-deep pb-1 hover:pb-2 transition-all">
-              Tüm projeler →
-            </Link>
-          </div>
+          </Reveal>
 
           {projects.length === 0 ? (
             <p className="text-muted-foreground text-center py-16">Henüz proje eklenmedi. <Link to="/projeler" className="underline">Proje sayfasını</Link> ziyaret edin.</p>
@@ -260,7 +299,18 @@ function Home() {
                 const ar  = i === 0 ? "aspect-[16/10]" : i === 1 ? "aspect-[3/4]" : "aspect-[4/3]";
                 const imgSrc = p.cover_image_url || (i % 3 === 0 ? projectIndustrial : i % 3 === 1 ? projectGreenRoof : projectMembrane);
                 return (
-                  <figure key={p.id} className={`${cols} group overflow-hidden`}>
+                  <Link
+                    key={p.id}
+                    to="/projeler/$slug"
+                    params={{ slug: p.slug }}
+                    className={`${cols} group overflow-hidden block`}
+                  >
+                  <motion.figure className="overflow-hidden"
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  >
                     <div className="overflow-hidden">
                       <img src={imgSrc} alt={p.title} loading="lazy" width={1400} height={1000}
                         className={`w-full ${ar} object-cover group-hover:scale-105 transition-transform duration-[1200ms]`} />
@@ -273,7 +323,8 @@ function Home() {
                       </div>
                       <span className="text-xs text-muted-foreground shrink-0">{p.completion_date ? new Date(p.completion_date).getFullYear() : ""}</span>
                     </figcaption>
-                  </figure>
+                  </motion.figure>
+                  </Link>
                 );
               })}
               {projects.length > 0 && (
@@ -308,6 +359,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* TESTIMONIALS — otomatik kayan referanslar */}
+      <Testimonials />
 
       {/* CONTACT CTA */}
       <section className="py-24 lg:py-40">
