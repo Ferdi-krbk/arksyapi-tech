@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -37,9 +37,6 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { data: settings = {} } = useSettings();
-  const { location } = useRouterState();
-  const isHome = location.pathname === "/";
-  const heroVisible = false;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -66,25 +63,25 @@ export function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="container-editorial flex items-center justify-between h-24">
+      <div className="container-editorial flex items-center justify-between h-16 md:h-24">
         <Link to="/" className="flex items-center gap-3 group">
-          <img src={heroVisible ? logoEmblemLight : logoEmblem} alt="ARKS" className="h-10 w-auto dark:hidden transition-all duration-500" width={33} height={40} />
+          <img src={logoEmblem} alt="ARKS" className="h-10 w-auto dark:hidden transition-all duration-500" width={33} height={40} />
           <img src={logoEmblemLight} alt="ARKS" className="h-10 w-auto hidden dark:block" width={33} height={40} />
-          <span className={`font-display text-2xl font-medium tracking-tight transition-colors duration-500 ${heroVisible ? "text-bone" : "text-forest-deep"}`}>ARKS</span>
+          <span className="font-display text-2xl font-medium tracking-tight text-forest-deep">ARKS</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-10">
           <Link
             to="/"
-            className={`text-[14px] font-medium transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-forest-deep hover:after:w-full after:transition-all after:duration-300 ${heroVisible ? "text-bone/80 hover:text-bone" : "text-forest-deep/75 hover:text-forest-deep"}`}
-            activeProps={{ className: heroVisible ? "text-bone after:w-full" : "text-forest-deep after:w-full" }}
+            className="text-[14px] font-medium transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-forest-deep hover:after:w-full after:transition-all after:duration-300 text-forest-deep/75 hover:text-forest-deep"
+            activeProps={{ className: "text-forest-deep after:w-full" }}
           >
             Anasayfa
           </Link>
 
           {/* Hizmetler acilir menu */}
           <div className="relative group">
-            <button className={`text-[14px] font-medium transition-colors inline-flex items-center gap-1.5 ${heroVisible ? "text-bone/80 hover:text-bone" : "text-forest-deep/75 hover:text-forest-deep"}`}>
+            <button className="text-[14px] font-medium text-forest-deep/75 hover:text-forest-deep transition-colors inline-flex items-center gap-1.5">
               Hizmetler
               <ChevronDown className="w-3.5 h-3.5 transition-transform group-hover:rotate-180" />
             </button>
@@ -111,8 +108,8 @@ export function Header() {
             <Link
               key={n.to}
               to={n.to}
-              className={`text-[14px] font-medium transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-current hover:after:w-full after:transition-all after:duration-300 ${heroVisible ? "text-bone/80 hover:text-bone" : "text-forest-deep/75 hover:text-forest-deep"}`}
-              activeProps={{ className: heroVisible ? "text-bone after:w-full" : "text-forest-deep after:w-full" }}
+              className="text-[14px] font-medium transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-current hover:after:w-full after:transition-all after:duration-300 text-forest-deep/75 hover:text-forest-deep"
+              activeProps={{ className: "text-forest-deep after:w-full" }}
             >
               {n.label}
             </Link>
@@ -120,17 +117,17 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <ThemeToggle className={heroVisible ? "text-bone border-bone/30 hover:bg-bone hover:text-forest-deep" : ""} />
+          <ThemeToggle className="" />
           <Link
             to="/iletisim"
-            className={`hidden md:inline-flex items-center gap-2 border px-5 py-2.5 text-[14px] font-medium hover:bg-forest-deep hover:text-bone transition-colors ${heroVisible ? "border-bone/40 text-bone" : "border-forest-deep text-forest-deep"}`}
+            className="hidden md:inline-flex items-center gap-2 border border-forest-deep text-forest-deep px-5 py-2.5 text-[14px] font-medium hover:bg-forest-deep hover:text-bone transition-colors"
           >
             İletişim
             <span aria-hidden>→</span>
           </Link>
           <button
             onClick={() => setOpen(true)}
-            className={`lg:hidden p-2 -mr-2 transition-colors ${heroVisible ? "text-bone" : "text-forest-deep"}`}
+            className="lg:hidden p-2 -mr-2 text-forest-deep"
             aria-label="Menüyü aç"
           >
             <Menu className="w-6 h-6" />
@@ -170,7 +167,7 @@ export function Header() {
                 onClick={() => setOpen(false)}
                 className="group flex items-baseline gap-5 py-2.5 border-b border-bone/10"
               >
-                <span className="eyebrow text-sage w-7 text-sm">0{i + 1}</span>
+                <span className="eyebrow text-sage w-8 text-sm text-right">{(i + 1).toString().padStart(2, "0")}</span>
                 <span className="font-display text-2xl md:text-3xl group-hover:translate-x-2 transition-transform">
                   {n.label}
                 </span>

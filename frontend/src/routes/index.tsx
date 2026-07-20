@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { PageShell } from "@/components/site/PageShell";
 import { Testimonials } from "@/components/site/Testimonials";
 import { SprayHero } from "@/components/site/SprayHero";
-import { useSliders, useReferences, slidersQueryOptions, projectsQueryOptions } from "@/hooks/queries";
+import { useSliders, useReferences, slidersQueryOptions, settingsQueryOptions, testimonialsQueryOptions } from "@/hooks/queries";
 import heroLogoImg from "@/assets/arks-hero-white.png";
 import heroLogoDark from "@/assets/arks-hero-dark.png";
 
@@ -12,7 +12,8 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => {
     const { queryClient } = context;
     queryClient.prefetchQuery(slidersQueryOptions());
-    queryClient.prefetchQuery(projectsQueryOptions());
+    queryClient.prefetchQuery(settingsQueryOptions());
+    queryClient.prefetchQuery(testimonialsQueryOptions());
   },
   component: Home,
 });
@@ -40,7 +41,7 @@ function Home() {
 
       {/* ─── HERO PANEL — ARKS logosu ─── */}
       <motion.div
-        className="container-editorial mt-10 md:mt-20 mb-16 md:mb-24"
+        className="container-editorial mt-6 md:mt-20 mb-10 md:mb-24"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -48,7 +49,7 @@ function Home() {
       >
         <div
           className="relative overflow-hidden hero-panel flex items-center justify-center"
-          style={{ minHeight: "30vh" }}
+          style={{ minHeight: "25dvh" }}
         >
           <img
             src={heroLogoImg}
@@ -72,7 +73,7 @@ function Home() {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8, delay: 0.2, ease }}
       >
-        <section className="py-24 mt-16 border-y border-forest-deep/10 bg-sage-soft/20 overflow-hidden">
+        <section className="py-12 md:py-24 mt-8 md:mt-16 border-y border-forest-deep/10 bg-sage-soft/20 overflow-hidden">
           <div className="container-editorial mb-12">
             <p className="eyebrow text-forest">— Referanslar</p>
           </div>
@@ -104,7 +105,7 @@ function Home() {
         transition={{ duration: 0.8, delay: 0.2, ease }}
       >
         <Testimonials />
-        <section className="py-24 lg:py-40">
+        <section className="py-12 md:py-24 lg:py-40">
           <div className="container-editorial">
             <div className="grid grid-cols-12 gap-6 items-center">
               <div className="col-span-12 md:col-span-7">

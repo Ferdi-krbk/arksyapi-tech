@@ -32,6 +32,7 @@ require __DIR__ . '/../partials/header.php';
                         <td><?= e($g['category'] ?: '-') ?></td>
                         <td><?= (int) $g['sort_order'] ?></td>
                         <td class="actions">
+                            <a href="<?= BASE_URL ?>/admin/gallery/edit.php?id=<?= (int) $g['id'] ?>" class="btn btn-sm btn-primary">Düzenle</a>
                             <form method="post" action="<?= BASE_URL ?>/admin/gallery/delete.php" style="display:inline" onsubmit="return confirm('Silinsin mi?');">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="id" value="<?= (int) $g['id'] ?>">

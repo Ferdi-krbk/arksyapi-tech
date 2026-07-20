@@ -48,11 +48,12 @@ export function ServicePage({ slug }: { slug: string }) {
                 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
               >— Hizmet</motion.p>
-              <motion.h1 className="display-lg text-forest-deep"
+              <motion.h1 className="display-lg text-forest-deep break-words hyphens-auto"
+                style={{ wordBreak: "break-word" }}
                 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
               >{title}</motion.h1>
-              <motion.p className="mt-8 font-display text-2xl md:text-3xl text-forest max-w-2xl font-light italic"
+              <motion.p className="mt-8 font-display text-xl md:text-3xl text-forest max-w-2xl font-light italic leading-snug"
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
@@ -65,7 +66,7 @@ export function ServicePage({ slug }: { slug: string }) {
             <motion.img
               src={image}
               alt={title}
-              className="w-full aspect-[16/9] max-h-[70vh] object-cover"
+              className="w-full aspect-[4/3] md:aspect-[16/9] max-h-[70vh] object-cover"
               style={{ objectPosition: imgPos }}
               width={1600}
               height={900}
@@ -77,11 +78,11 @@ export function ServicePage({ slug }: { slug: string }) {
       </section>
 
       <section className="py-20">
-        <div className="container-editorial grid grid-cols-12 gap-10">
+        <div className="container-editorial grid grid-cols-12 gap-6 md:gap-10 overflow-hidden">
           <div className="col-span-12 md:col-span-5">
             <Reveal>
             <p className="eyebrow text-forest mb-6">— Sistem</p>
-            <p className="text-forest-deep font-display text-2xl leading-snug">
+            <p className="text-forest-deep font-display text-2xl leading-snug break-words" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
               {intro}
             </p>
             </Reveal>
@@ -97,14 +98,14 @@ export function ServicePage({ slug }: { slug: string }) {
                     transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <span className="eyebrow text-forest/60 text-sm pt-1 tabular-nums">0{i + 1}</span>
-                    <span className="text-forest-deep leading-snug">{f}</span>
+                    <span className="text-forest-deep leading-snug break-words" style={{ overflowWrap: "break-word" }}>{f}</span>
                   </motion.li>
                 ))}
               </ul>
             )}
           </div>
-          <Reveal className="col-span-12 md:col-span-6 md:col-start-7" delay={0.1}>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+          <Reveal className="col-span-12 col-start-auto md:col-span-6 md:col-start-7" delay={0.1}>
+            <p className="text-lg text-muted-foreground leading-relaxed break-words" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
               {detail}
             </p>
             <Link
