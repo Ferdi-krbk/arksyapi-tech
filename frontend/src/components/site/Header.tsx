@@ -39,7 +39,7 @@ export function Header() {
   const { data: settings = {} } = useSettings();
   const { location } = useRouterState();
   const isHome = location.pathname === "/";
-  const heroVisible = isHome && !scrolled;
+  const heroVisible = false;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
